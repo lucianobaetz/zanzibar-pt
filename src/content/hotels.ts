@@ -36,7 +36,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: false,
-    fromPrice: null,
+    fromPrice: 2159,
     seoTitle: "Riu Jambo Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Riu Jambo em Nungwi, Zanzibar, tudo incluído com voo de Lisboa, transfers e seguro. Escolha a partida de 2027 e peça a sua reserva sem pagar online.",
@@ -60,7 +60,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: false,
-    fromPrice: null,
+    fromPrice: 2479,
     seoTitle: "Riu Palace Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Riu Palace Zanzibar na praia de Nungwi, tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -84,7 +84,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: true,
-    fromPrice: null,
+    fromPrice: 2532,
     seoTitle: "Riu Palace Swahili Zanzibar: só adultos, tudo incluído",
     seoDescription:
       "Riu Palace Swahili, hotel só para adultos em Nungwi, Zanzibar. Tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -108,7 +108,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Kiwengwa",
     coast: "Costa leste",
     adultsOnly: false,
-    fromPrice: null,
+    fromPrice: 2811,
     seoTitle: "Meliá Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Meliá Zanzibar, em Kiwengwa, em tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -132,7 +132,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Kiwengwa",
     coast: "Costa leste",
     adultsOnly: false,
-    fromPrice: null,
+    fromPrice: 2134,
     seoTitle: "TUI BLUE Bahari Zanzibar: tudo incluído com voo",
     seoDescription:
       "TUI BLUE Bahari Zanzibar em tudo incluído, com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",

@@ -66,7 +66,7 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
         <div className="flex items-end justify-between gap-2 md:hidden">
           <p className="text-xs text-ink-soft">Voo desde Lisboa</p>
           <Link href={href} className="rounded-sm bg-ink px-3 py-1.5 text-right text-white">
-            <span className="block text-[10px] leading-none text-white/80">{hotel.fromPrice === null ? "Preço" : "desde"}</span>
+            <span className="block text-[10px] leading-none text-white/80">{hotel.fromPrice === null ? "Preço" : "desde, por pessoa"}</span>
             <span className="block whitespace-nowrap font-display text-base font-semibold leading-tight">
               {hotel.fromPrice === null ? "sob pedido" : `${hotel.fromPrice}€`}
             </span>
