@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { HOTELS } from "@/content/hotels";
 import { SITE } from "@/lib/site";
@@ -6,9 +7,9 @@ export const SiteFooter = () => (
   <footer className="sun-glow mt-24 text-sand-100">
     <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr]">
       <div>
-        <p className="font-display text-2xl font-semibold text-white">
-          Zanzibar <span className="text-spice-400">Resorts</span>
-        </p>
+        <Link href="/" className="inline-block rounded-2xl bg-white px-4 py-2.5" aria-label="Zanzibar Resorts, página inicial">
+          <Image src="/logo-zanzibar.png" alt="Zanzibar, paraíso por descobrir" width={776} height={175} className="h-9 w-auto" />
+        </Link>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-sand-200">
           Férias em Zanzibar em tudo incluído, com voo de Lisboa, transfers e seguro de viagem. Tratamos de tudo, do primeiro
           contacto ao regresso.

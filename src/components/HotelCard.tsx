@@ -4,44 +4,47 @@ import type { Hotel } from "@/content/hotels";
 
 type HotelCardProps = { hotel: Hotel; priority?: boolean };
 
-// Booking-style result: photo on the left, facts in the middle, call to action on the right.
-// The hotel name is never printed over the photo (the photo sells the dream, the text sits beside it).
+// Result card. On phones it is a compact row (photo left, text beside it, price in a dark box,
+// like Logitravel); from tablets up it grows into the Booking-style card with details and thumbnails.
+// The hotel name is never printed over the photo.
 export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
   const [cover, ...rest] = hotel.images;
   const href = `/hoteis/${hotel.slug}`;
+  const priceLabel = hotel.fromPrice === null ? "Preço sob pedido" : `desde ${hotel.fromPrice} €`;
 
   return (
-    <article className="group grid overflow-hidden rounded-3xl border border-sand-200 bg-white shadow-sm transition-shadow hover:shadow-lg md:grid-cols-[19rem_1fr]">
-      <Link href={href} className="relative block aspect-[4/3] md:aspect-auto md:min-h-64" tabIndex={-1} aria-hidden>
+    <article className="group grid grid-cols-[8.5rem_1fr] overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm transition-shadow hover:shadow-lg sm:grid-cols-[11rem_1fr] md:grid-cols-[19rem_1fr] md:rounded-3xl">
+      <Link href={href} className="relative block min-h-36 md:min-h-64" tabIndex={-1} aria-hidden>
         {cover ? (
           <Image
             src={cover.src}
             alt=""
             fill
-            sizes="(min-width: 768px) 19rem, 100vw"
+            sizes="(min-width: 768px) 19rem, (min-width: 640px) 11rem, 8.5rem"
             priority={priority}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : null}
         {hotel.adultsOnly ? (
-          <span className="absolute left-3 top-3 rounded-full bg-ocean-900/90 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
+          <span className="absolute left-2 top-2 rounded-full bg-ocean-900/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white md:left-3 md:top-3 md:px-3 md:py-1 md:text-xs">
             Só adultos
           </span>
         ) : null}
       </Link>
 
-      <div className="flex flex-col gap-4 p-5 sm:p-6 lg:flex-row lg:items-stretch lg:justify-between">
+      <div className="flex min-w-0 flex-col justify-between gap-3 p-3 sm:p-4 md:gap-4 md:p-6 lg:flex-row lg:items-stretch lg:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-bold uppercase tracking-widest text-lagoon-500">
-            {[hotel.area, hotel.coast].filter(Boolean).join(" · ")}
-          </p>
-          <h3 className="mt-1 text-2xl font-semibold text-ocean-900">
+          <h3 className="text-lg font-semibold leading-snug text-ocean-900 md:text-2xl">
             <Link href={href} className="hover:underline">
               {hotel.name}
             </Link>
           </h3>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">{hotel.intro}</p>
-          <ul className="mt-3 flex flex-wrap gap-2" aria-label={`Destaques do ${hotel.name}`}>
+          <p className="mt-0.5 text-sm text-ink-soft md:order-first md:mb-1 md:mt-0 md:text-xs md:font-bold md:uppercase md:tracking-widest md:text-lagoon-500">
+            {[hotel.area, hotel.coast].filter(Boolean).join(" · ")}
+          </p>
+          <p className="mt-1 text-sm font-semibold text-lagoon-600 md:hidden">Tudo incluído · 7 noites</p>
+          <p className="mt-2 hidden text-sm leading-relaxed text-ink-soft md:block">{hotel.intro}</p>
+          <ul className="mt-3 hidden flex-wrap gap-2 md:flex" aria-label={`Destaques do ${hotel.name}`}>
             {hotel.highlights.map((item) => (
               <li key={item} className="rounded-full bg-lagoon-100/70 px-3 py-1 text-xs font-semibold text-ocean-700">
                 {item}
@@ -49,7 +52,7 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
             ))}
           </ul>
           {rest.length > 0 ? (
-            <ul className="mt-4 hidden gap-2 sm:flex" aria-hidden>
+            <ul className="mt-4 hidden gap-2 md:flex" aria-hidden>
               {rest.slice(0, 3).map((photo) => (
                 <li key={photo.src} className="relative h-14 w-20 overflow-hidden rounded-xl">
                   <Image src={photo.src} alt="" fill sizes="80px" className="object-cover" />
@@ -59,12 +62,22 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
           ) : null}
         </div>
 
-        <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-t border-sand-200 pt-4 lg:w-48 lg:flex-col lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0 lg:text-right">
+        {/* Phones: voo + dark price box, as on Logitravel. */}
+        <div className="flex items-end justify-between gap-2 md:hidden">
+          <p className="text-xs text-ink-soft">Voo desde Lisboa</p>
+          <Link href={href} className="rounded-sm bg-ink px-3 py-1.5 text-right text-white">
+            <span className="block text-[10px] leading-none text-white/80">{hotel.fromPrice === null ? "Preço" : "desde"}</span>
+            <span className="block whitespace-nowrap font-display text-base font-semibold leading-tight">
+              {hotel.fromPrice === null ? "sob pedido" : `${hotel.fromPrice}€`}
+            </span>
+          </Link>
+        </div>
+
+        {/* Tablet and desktop. */}
+        <div className="hidden shrink-0 flex-row items-end justify-between gap-4 border-t border-sand-200 pt-4 md:flex lg:w-48 lg:flex-col lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0 lg:text-right">
           <div>
             <p className="text-xs text-ink-soft">7 noites · voo de Lisboa</p>
-            <p className="font-display text-lg font-semibold text-ocean-900">
-              {hotel.fromPrice === null ? "Preço sob pedido" : `desde ${hotel.fromPrice} €`}
-            </p>
+            <p className="font-display text-lg font-semibold text-ocean-900">{priceLabel}</p>
             {hotel.fromPrice === null ? null : <p className="text-xs text-ink-soft">por pessoa</p>}
           </div>
           <Link

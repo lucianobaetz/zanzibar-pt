@@ -15,11 +15,11 @@ export const SearchBar = ({ variant = "hero", defaults = {} }: SearchBarProps) =
     aria-label="Procurar férias em Zanzibar"
     className={
       variant === "hero"
-        ? "grid gap-3 rounded-3xl bg-white p-4 shadow-2xl sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.7fr_0.7fr_auto] lg:items-end"
-        : "grid gap-3 rounded-3xl border border-sand-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.7fr_0.7fr_auto] lg:items-end"
+        ? "grid grid-cols-2 gap-3 rounded-3xl bg-white p-4 shadow-2xl sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.7fr_0.7fr_auto] lg:items-end"
+        : "grid grid-cols-2 gap-3 rounded-3xl border border-sand-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-[1.2fr_1.2fr_0.7fr_0.7fr_auto] lg:items-end"
     }
   >
-    <div>
+    <div className="col-span-2 sm:col-span-1">
       <label htmlFor={`zona-${variant}`} className={label}>Zona</label>
       <select id={`zona-${variant}`} name="zona" defaultValue={defaults.zona ?? ""} className={field}>
         <option value="">Toda a ilha</option>
@@ -28,7 +28,7 @@ export const SearchBar = ({ variant = "hero", defaults = {} }: SearchBarProps) =
         ))}
       </select>
     </div>
-    <div>
+    <div className="col-span-2 sm:col-span-1">
       <label htmlFor={`mes-${variant}`} className={label}>Partida de Lisboa</label>
       <select id={`mes-${variant}`} name="mes" defaultValue={defaults.mes ?? ""} className={field}>
         <option value="">Qualquer mês de 2027</option>
@@ -55,7 +55,7 @@ export const SearchBar = ({ variant = "hero", defaults = {} }: SearchBarProps) =
     </div>
     <button
       type="submit"
-      className="rounded-xl bg-clove-500 px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-clove-600"
+      className="col-span-2 rounded-xl bg-clove-500 px-7 py-3 text-sm font-bold text-white transition-colors hover:bg-clove-600"
     >
       Ver hotéis
     </button>

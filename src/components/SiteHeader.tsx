@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SITE, whatsappUrl } from "@/lib/site";
 
@@ -18,8 +19,8 @@ export const SiteHeader = () => (
     </a>
     <header className="sticky top-0 z-40 border-b border-sand-200/80 bg-sand-50/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ocean-900">
-          Zanzibar <span className="text-clove-500">Resorts</span>
+        <Link href="/" className="shrink-0" aria-label="Zanzibar Resorts, página inicial">
+          <Image src="/logo-zanzibar.png" alt="Zanzibar, paraíso por descobrir" width={776} height={175} priority className="h-8 w-auto md:h-10" />
         </Link>
 
         <nav aria-label="Principal" className="flex items-center gap-1 text-sm font-semibold sm:gap-2">

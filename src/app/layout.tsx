@@ -32,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 name: SITE.name,
                 legalName: SITE.legalName,
                 url: SITE_URL,
-                logo: absoluteUrl("/logo.png"),
+                logo: absoluteUrl("/logo-zanzibar.png"),
                 telephone: SITE.phone,
                 email: SITE.email,
                 areaServed: { "@type": "Country", name: "Portugal" },
