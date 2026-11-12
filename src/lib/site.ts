@@ -31,8 +31,22 @@ export const SITE = {
   legalName: "Vamos Fugir – Viagens e Expedições",
   rnavt: "4155",
   phone: "+351937045579",
+  phoneDisplay: "+351 937 045 579",
   email: "info@vamosfugir.pt",
   locale: "pt-PT",
+  copyrightYear: 2026,
+} as const;
+
+export const GOOGLE_REVIEWS = {
+  rating: "4,9",
+  count: 100,
+  url: "https://www.google.com/maps?cid=6512420814417850103",
 } as const;
 
 export const absoluteUrl = (path: string): string => new URL(path, SITE_URL).toString();
+
+export const whatsappUrl = (message: string): string =>
+  `https://wa.me/${SITE.phone.replace("+", "")}?text=${encodeURIComponent(message)}`;
+
+export const mailtoUrl = (subject: string, body: string): string =>
+  `mailto:${SITE.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
