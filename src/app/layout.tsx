@@ -2,9 +2,10 @@ import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/fraunces";
 import "@fontsource-variable/manrope";
 import "./globals.css";
+import { JsonLd } from "@/components/JsonLd";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SITE, SITE_URL } from "@/lib/site";
+import { absoluteUrl, SITE, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -21,8 +22,42 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="pt-PT">
       <body className="flex min-h-screen flex-col">
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "TravelAgency",
+                "@id": `${SITE_URL}/#agency`,
+                name: SITE.name,
+                legalName: SITE.legalName,
+                url: SITE_URL,
+                logo: absoluteUrl("/logo.png"),
+                telephone: SITE.phone,
+                email: SITE.email,
+                areaServed: { "@type": "Country", name: "Portugal" },
+                identifier: `RNAVT ${SITE.rnavt}`,
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  telephone: SITE.phone,
+                  email: SITE.email,
+                  contactType: "customer service",
+                  availableLanguage: "pt-PT",
+                },
+              },
+              {
+                "@type": "WebSite",
+                "@id": `${SITE_URL}/#website`,
+                url: SITE_URL,
+                name: SITE.name,
+                inLanguage: SITE.locale,
+                publisher: { "@id": `${SITE_URL}/#agency` },
+              },
+            ],
+          }}
+        />
         <SiteHeader />
-        <main className="flex-1">{children}</main>
+        <main id="conteudo" className="flex-1">{children}</main>
         <SiteFooter />
       </body>
     </html>

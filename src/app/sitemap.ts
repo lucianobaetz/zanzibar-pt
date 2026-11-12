@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/hoteis"), lastModified: CONTENT_UPDATED, changeFrequency: "weekly", priority: 0.9 },
     ...HOTELS.map((hotel) => ({
       url: absoluteUrl(`/hoteis/${hotel.slug}`),
+      images: hotel.images.map((image) => absoluteUrl(image.src)),
       lastModified: CONTENT_UPDATED,
       changeFrequency: "weekly" as const,
       priority: 0.8,
