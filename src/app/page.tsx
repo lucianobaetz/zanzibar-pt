@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: { absolute: TITLE },
   description: DESCRIPTION,
   alternates: { canonical: "/" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/", images: [{ url: "/images/destino/hero-molhe-por-do-sol.webp", alt: "Molhe ao pôr do sol em Zanzibar" }] },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/", images: [{ url: "/images/destino/the-rock-topo.webp", alt: "The Rock, o restaurante sobre o mar em Zanzibar" }] },
 };
 
 const STEPS = [
@@ -70,20 +70,20 @@ export default function HomePage() {
           description:
             "Arquipélago da Tanzânia no Oceano Índico, conhecido pelas praias de areia branca, pelo mar turquesa e por Stone Town, Património Mundial da UNESCO.",
           touristType: ["Férias de praia", "Lua de mel", "Férias tudo incluído"],
-          image: absoluteUrl("/images/destino/hero-molhe-por-do-sol.webp"),
+          image: absoluteUrl("/images/destino/the-rock-topo.webp"),
         }}
       />
 
       <section className="relative isolate overflow-hidden bg-ocean-950 text-white">
         <Image
-          src="/images/destino/hero-molhe-por-do-sol.webp"
-          alt="Molhe de madeira sobre o mar ao pôr do sol, em Zanzibar"
+          src="/images/destino/the-rock-topo.webp"
+          alt="The Rock, restaurante sobre o mar turquesa na praia de Michamvi, em Zanzibar"
           fill
           priority
           sizes="100vw"
-          className="-z-10 object-cover"
+          className="-z-10 -scale-x-100 object-cover object-[60%_60%]"
         />
-        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-ocean-950/70 via-ocean-950/25 to-ocean-950/80" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-ocean-950/55 via-ocean-950/10 to-ocean-950/60" />
         <div className="mx-auto max-w-6xl px-5 pb-36 pt-16 sm:pb-40 sm:pt-24">
           <p className="inline-block rounded-full bg-white/15 px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-white backdrop-blur">
             Voo desde Lisboa · Tudo incluído · 2027

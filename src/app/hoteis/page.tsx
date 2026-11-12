@@ -47,7 +47,7 @@ export default function HotelsPage() {
       />
 
       <section className="relative isolate overflow-hidden bg-ocean-900 text-white">
-        <Image src="/images/destino/praias-aerea.webp" alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
+        <Image src="/images/destino/molhe-aerea-topo.webp" alt="" fill priority sizes="100vw" className="-z-10 object-cover" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-b from-ocean-950/55 via-ocean-950/20 to-transparent" />
         <div className="mx-auto max-w-6xl px-5 pb-24 pt-12 sm:pt-16">
           <h1 className="max-w-3xl text-4xl font-semibold leading-tight [text-shadow:0_2px_16px_rgb(0_0_0/0.35)] sm:text-5xl">Hotéis em Zanzibar, tudo incluído</h1>
