@@ -19,6 +19,7 @@ export const HotelResults = () => {
   const [areas, setAreas] = useState<string[]>(initialArea && HOTEL_AREAS.includes(initialArea) ? [initialArea] : []);
   const [adultsOnly, setAdultsOnly] = useState(false);
   const [sort, setSort] = useState<Sort>("recomendado");
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const results = useMemo(() => {
     const filtered = HOTELS.filter((hotel) => {
@@ -37,6 +38,18 @@ export const HotelResults = () => {
   return (
     <div className="grid gap-8 lg:grid-cols-[16rem_1fr]">
       <aside aria-label="Filtros" className="h-fit rounded-3xl border border-sand-200 bg-white p-4 lg:sticky lg:top-24">
+        {/* Phones: filters stay folded so the hotels show first. */}
+        <button
+          type="button"
+          aria-expanded={filtersOpen}
+          aria-controls="filtros-conteudo"
+          onClick={() => setFiltersOpen((open) => !open)}
+          className="flex w-full items-center justify-between px-3 py-1 text-sm font-bold text-ocean-900 lg:hidden"
+        >
+          Filtros e ordenação
+          <span aria-hidden>{filtersOpen ? "−" : "+"}</span>
+        </button>
+        <div id="filtros-conteudo" className={`${filtersOpen ? "mt-3" : "hidden"} lg:mt-0 lg:block`}>
         <fieldset>
           <legend className="px-3 text-xs font-bold uppercase tracking-widest text-ocean-700">Zona</legend>
           {HOTEL_AREAS.map((area) => (
@@ -64,6 +77,7 @@ export const HotelResults = () => {
             <option value="recomendado">Os nossos preferidos</option>
             <option value="nome">Nome (A a Z)</option>
           </select>
+        </div>
         </div>
       </aside>
 

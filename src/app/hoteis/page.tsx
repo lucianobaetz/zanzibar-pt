@@ -56,11 +56,11 @@ export default function HotelsPage() {
         </div>
       </section>
 
-      <div className="relative z-10 mx-auto -mt-14 max-w-6xl px-5">
+      <div id="pesquisa" className="relative z-10 mx-auto -mt-14 max-w-6xl scroll-mt-20 px-5">
         <SearchBar variant="hero" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-5 py-12">
+      <div className="mx-auto max-w-6xl px-5 py-12 pb-28 md:pb-12">
         <h2 className="sr-only">Hotéis disponíveis</h2>
         {/* useSearchParams needs a Suspense boundary; the fallback is the full crawlable list. */}
         <Suspense
@@ -74,6 +74,13 @@ export default function HotelsPage() {
         >
           <HotelResults />
         </Suspense>
+      </div>
+
+      {/* Phones: a search button that stays on screen while scrolling the results. */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-sand-200 bg-white/95 p-3 backdrop-blur md:hidden">
+        <a href="#pesquisa" className="block rounded-xl bg-clove-500 py-3.5 text-center text-sm font-bold uppercase tracking-widest text-white">
+          Procurar
+        </a>
       </div>
     </>
   );
