@@ -1,3 +1,4 @@
+import { POSTS } from "@/content/blog";
 import { HOTELS } from "@/content/hotels";
 import { ZANZIBAR_FAQ } from "@/content/faq";
 import { absoluteUrl, SITE, SITE_URL } from "@/lib/site";
@@ -9,6 +10,7 @@ export function GET() {
     (hotel) =>
       `- [${hotel.name}](${absoluteUrl(`/hoteis/${hotel.slug}`)}): ${hotel.intro}`,
   ).join("\n");
+  const guides = POSTS.map((post) => `- [${post.title}](${absoluteUrl(`/blog/${post.slug}`)}): ${post.excerpt}`).join("\n");
   const faq = ZANZIBAR_FAQ.map((item) => `### ${item.question}\n${item.answer}`).join("\n\n");
 
   const body = `# ${SITE.name}
@@ -23,6 +25,11 @@ ${hotels}
 ## Páginas principais
 - [Início](${SITE_URL}/): pesquisa por zona, mês de partida e pessoas
 - [Todos os hotéis](${absoluteUrl("/hoteis")}): lista com filtros
+- [Viagens a Zanzibar](${absoluteUrl("/viagens-zanzibar")}): como funciona, hotéis e datas
+- [Zanzibar tudo incluído 2027](${absoluteUrl("/zanzibar-tudo-incluido")}): comparação dos cinco hotéis
+
+## Guias
+${guides}
 
 ## Perguntas frequentes
 ${faq}

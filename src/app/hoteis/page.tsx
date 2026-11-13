@@ -8,7 +8,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { HOTELS } from "@/content/hotels";
 import { absoluteUrl } from "@/lib/site";
 
-const TITLE = "Hotéis em Zanzibar tudo incluído com voo de Lisboa";
+const TITLE = "Hotéis em Zanzibar 2027: tudo incluído com voo de Lisboa";
 const DESCRIPTION =
   "Riu Jambo, Riu Palace Zanzibar, Riu Palace Swahili, Meliá Zanzibar e TUI BLUE Bahari: tudo incluído com voo de Lisboa, transfers e seguro.";
 

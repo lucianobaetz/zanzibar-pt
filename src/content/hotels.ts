@@ -39,7 +39,7 @@ export const HOTELS: readonly Hotel[] = [
     coast: "Costa norte",
     adultsOnly: false,
     fromPrice: lowestPrice("riu-jambo-zanzibar"),
-    seoTitle: "Riu Jambo Zanzibar: tudo incluído com voo de Lisboa",
+    seoTitle: "Riu Jambo Zanzibar 2027: tudo incluído desde Lisboa",
     seoDescription:
       "Riu Jambo em Nungwi, Zanzibar, tudo incluído com voo de Lisboa, transfers e seguro. Escolha a partida de 2027 e peça a sua reserva sem pagar online.",
     intro:
@@ -63,7 +63,7 @@ export const HOTELS: readonly Hotel[] = [
     coast: "Costa norte",
     adultsOnly: false,
     fromPrice: lowestPrice("riu-palace-zanzibar"),
-    seoTitle: "Riu Palace Zanzibar: tudo incluído com voo de Lisboa",
+    seoTitle: "Riu Palace Zanzibar 2027: tudo incluído, voo de Lisboa",
     seoDescription:
       "Riu Palace Zanzibar na praia de Nungwi, tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
     intro:
@@ -87,7 +87,7 @@ export const HOTELS: readonly Hotel[] = [
     coast: "Costa norte",
     adultsOnly: true,
     fromPrice: lowestPrice("riu-palace-swahili-zanzibar"),
-    seoTitle: "Riu Palace Swahili Zanzibar: só adultos, tudo incluído",
+    seoTitle: "Riu Palace Swahili Zanzibar 2027: só adultos",
     seoDescription:
       "Riu Palace Swahili, hotel só para adultos em Nungwi, Zanzibar. Tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
     intro:
@@ -111,7 +111,7 @@ export const HOTELS: readonly Hotel[] = [
     coast: "Costa leste",
     adultsOnly: false,
     fromPrice: lowestPrice("melia-zanzibar"),
-    seoTitle: "Meliá Zanzibar: tudo incluído com voo de Lisboa",
+    seoTitle: "Meliá Zanzibar 2027: tudo incluído com voo de Lisboa",
     seoDescription:
       "Meliá Zanzibar, em Kiwengwa, em tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
     intro:
@@ -135,7 +135,7 @@ export const HOTELS: readonly Hotel[] = [
     coast: "Costa leste",
     adultsOnly: false,
     fromPrice: lowestPrice("tui-blue-bahari-zanzibar"),
-    seoTitle: "TUI BLUE Bahari Zanzibar: tudo incluído com voo",
+    seoTitle: "TUI BLUE Bahari Zanzibar 2027: tudo incluído, Lisboa",
     seoDescription:
       "TUI BLUE Bahari Zanzibar em tudo incluído, com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
     intro:

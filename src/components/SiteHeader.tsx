@@ -4,6 +4,7 @@ import { SITE, whatsappUrl } from "@/lib/site";
 
 const NAV = [
   { href: "/hoteis", label: "Hotéis" },
+  { href: "/blog", label: "Blog" },
   { href: "/#destinos", label: "Praias e locais" },
   { href: "/#como-funciona", label: "Como funciona" },
   { href: "/#perguntas", label: "Perguntas" },
