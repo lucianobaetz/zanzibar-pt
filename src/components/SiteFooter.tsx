@@ -52,6 +52,9 @@ export const SiteFooter = () => (
             </a>
           </li>
           <li>
+            <Link href="/contacto" className="hover:text-white hover:underline">Contactos</Link>
+          </li>
+          <li>
             <a href={`mailto:${SITE.email}`} className="hover:text-white hover:underline">
               {SITE.email}
             </a>

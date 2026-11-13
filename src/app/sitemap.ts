@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/viagens-zanzibar"), lastModified: CONTENT_UPDATED, changeFrequency: "weekly", priority: 0.9 },
     { url: absoluteUrl("/zanzibar-tudo-incluido"), lastModified: CONTENT_UPDATED, changeFrequency: "weekly", priority: 0.9 },
     { url: absoluteUrl("/blog"), lastModified: CONTENT_UPDATED, changeFrequency: "weekly", priority: 0.7 },
+    { url: absoluteUrl("/contacto"), lastModified: CONTENT_UPDATED, changeFrequency: "yearly", priority: 0.3 },
     ...POSTS.map((post) => ({
       url: absoluteUrl(`/blog/${post.slug}`),
       images: [absoluteUrl(post.cover.src)],
