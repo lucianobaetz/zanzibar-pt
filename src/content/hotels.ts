@@ -3,6 +3,8 @@
 // or on site": never guess a location, a rating or a price.
 // Sources: riu.com (Riu hotels), melia.com and tui-blue.com (official photo galleries).
 
+import { lowestPrice } from "@/lib/departures";
+
 export type HotelImage = { src: string; alt: string };
 
 export type Hotel = {
@@ -12,7 +14,7 @@ export type Hotel = {
   area: string | null;
   coast: "Costa norte" | "Costa leste" | null;
   adultsOnly: boolean;
-  // Price per person from the cheapest 2027 departure, in euros. null = on request.
+  // Price per person from the cheapest 2027 departure (derived from the calendar), in euros.
   fromPrice: number | null;
   // Provisional SEO copy: final titles/descriptions follow the keyword research.
   seoTitle: string;
@@ -36,7 +38,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: false,
-    fromPrice: 2159,
+    fromPrice: lowestPrice("riu-jambo-zanzibar"),
     seoTitle: "Riu Jambo Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Riu Jambo em Nungwi, Zanzibar, tudo incluído com voo de Lisboa, transfers e seguro. Escolha a partida de 2027 e peça a sua reserva sem pagar online.",
@@ -60,7 +62,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: false,
-    fromPrice: 2479,
+    fromPrice: lowestPrice("riu-palace-zanzibar"),
     seoTitle: "Riu Palace Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Riu Palace Zanzibar na praia de Nungwi, tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -84,7 +86,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Nungwi",
     coast: "Costa norte",
     adultsOnly: true,
-    fromPrice: 2532,
+    fromPrice: lowestPrice("riu-palace-swahili-zanzibar"),
     seoTitle: "Riu Palace Swahili Zanzibar: só adultos, tudo incluído",
     seoDescription:
       "Riu Palace Swahili, hotel só para adultos em Nungwi, Zanzibar. Tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -108,7 +110,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Kiwengwa",
     coast: "Costa leste",
     adultsOnly: false,
-    fromPrice: 2811,
+    fromPrice: lowestPrice("melia-zanzibar"),
     seoTitle: "Meliá Zanzibar: tudo incluído com voo de Lisboa",
     seoDescription:
       "Meliá Zanzibar, em Kiwengwa, em tudo incluído com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",
@@ -132,7 +134,7 @@ export const HOTELS: readonly Hotel[] = [
     area: "Kiwengwa",
     coast: "Costa leste",
     adultsOnly: false,
-    fromPrice: 2134,
+    fromPrice: lowestPrice("tui-blue-bahari-zanzibar"),
     seoTitle: "TUI BLUE Bahari Zanzibar: tudo incluído com voo",
     seoDescription:
       "TUI BLUE Bahari Zanzibar em tudo incluído, com voo de Lisboa, transfers e seguro. Partidas em 2027 e pedido de reserva sem pagar online.",

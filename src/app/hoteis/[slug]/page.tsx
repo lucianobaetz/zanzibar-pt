@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DepartureCalendar } from "@/components/DepartureCalendar";
 import { FaqSection } from "@/components/FaqSection";
 import { HotelGallery } from "@/components/HotelGallery";
 import { JsonLd } from "@/components/JsonLd";
@@ -54,6 +55,7 @@ const hotelFaq = (hotel: Hotel): readonly Faq[] => [
 const SECTIONS = [
   { id: "fotos", label: "Fotos" },
   { id: "sobre", label: "Sobre o hotel" },
+  { id: "datas", label: "Datas e preços" },
   { id: "inclui", label: "O que inclui" },
   { id: "perguntas", label: "Perguntas" },
 ] as const;
@@ -162,6 +164,11 @@ export default async function HotelPage({ params }: HotelPageProps) {
                 </div>
               ))}
             </dl>
+          </section>
+
+          <section id="datas" aria-labelledby="datas-titulo" className="scroll-mt-32">
+            <h2 id="datas-titulo" className="text-3xl font-semibold text-ocean-900">Datas e preços 2027 do {hotel.name}</h2>
+            <DepartureCalendar slug={hotel.slug} hotelName={hotel.name} />
           </section>
 
           <section id="inclui" aria-label="O que inclui" className="scroll-mt-32">
