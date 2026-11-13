@@ -8,6 +8,10 @@ export const stoneTownZanzibar: Post = {
   description:
     "O que ver em Stone Town, o centro histórico de Zanzibar: ruelas, portas esculpidas, mercados, Forodhani e dicas para um dia de visita.",
   excerpt: "O centro histórico de Zanzibar: o que ver, quanto tempo reservar e dicas para uma visita de um dia.",
+  subtitle: "O centro histórico, o mercado e como visitar num dia.",
+  category: "O que fazer",
+  tags: ["Stone Town", "história", "passeios"],
+  status: "published",
   keywords: ["stone town zanzibar", "o que ver em stone town", "stone town"],
   published: "2026-11-13",
   updated: "2026-11-13",

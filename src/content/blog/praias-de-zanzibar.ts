@@ -8,6 +8,10 @@ export const praiasDeZanzibar: Post = {
   description:
     "As melhores praias de Zanzibar: Nungwi, Kendwa, Kiwengwa, Paje, Jambiani e Pingwe (The Rock). Como são, a maré e qual escolher.",
   excerpt: "Nungwi, Kendwa, Kiwengwa, Paje, Jambiani e Pingwe: como são e qual escolher conforme o que procura.",
+  subtitle: "Nungwi, Kendwa, Paje e Jambiani: como a maré e a zona mudam a praia.",
+  category: "O que fazer",
+  tags: ["praias", "Nungwi", "Paje"],
+  status: "published",
   keywords: ["zanzibar praias", "melhores praias de zanzibar", "praias zanzibar", "paje zanzibar", "praia de nungwi"],
   published: "2026-11-13",
   updated: "2026-11-13",
