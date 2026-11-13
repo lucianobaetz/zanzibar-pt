@@ -67,8 +67,11 @@ export async function POST(request: Request) {
     console.error("pedido: falhou o envio de e-mail", error);
   }
 
-  // Never tell a customer "received" if nobody on the team can ever see it.
-  if (!saved && !emailed) return Response.json({ ok: false, error: "Não foi possível registar o pedido." }, { status: 500 });
-  if (!emailed) console.error("pedido: GUARDADO MAS SEM E-MAIL (configurar SMTP_*)", stored.hotelName, stored.date);
+  // A request nobody is told about is worse than an honest "try again or call": the customer must never
+  // see "received" while the team is not notified. The request stays on disk for the record.
+  if (!emailed) {
+    console.error("pedido: SEM E-MAIL (configurar SMTP_* no servidor)", stored.hotelName, stored.date, saved ? "(guardado)" : "(não guardado)");
+    return Response.json({ ok: false, error: "O envio de e-mail não está disponível neste momento." }, { status: 503 });
+  }
   return Response.json({ ok: true });
 }
