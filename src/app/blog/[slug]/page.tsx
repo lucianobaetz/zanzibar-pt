@@ -6,7 +6,7 @@ import { FaqSection } from "@/components/FaqSection";
 import { JsonLd } from "@/components/JsonLd";
 import { RichText } from "@/components/RichText";
 import { getPost, POSTS } from "@/content/blog";
-import { readingMinutes, relatedPosts, withLeadForm } from "@/content/blog/utils";
+import { outline, readingMinutes, relatedPosts, withLeadForm } from "@/content/blog/utils";
 import { absoluteUrl, SITE } from "@/lib/site";
 
 type PostPageProps = { params: Promise<{ slug: string }> };
@@ -49,6 +49,7 @@ export default async function PostPage({ params }: PostPageProps) {
   const url = absoluteUrl(`/blog/${post.slug}`);
   const minutes = readingMinutes(post);
   const more = relatedPosts(post, POSTS);
+  const sections = outline(post.blocks);
 
   return (
     <>
@@ -66,7 +67,7 @@ export default async function PostPage({ params }: PostPageProps) {
           dateModified: post.updated,
           inLanguage: SITE.locale,
           mainEntityOfPage: url,
-          author: { "@type": "Organization", name: SITE.legalName },
+          author: { "@type": "Person", name: "Luciano Baetz", worksFor: { "@type": "Organization", name: SITE.legalName } },
           publisher: { "@type": "Organization", name: SITE.legalName },
         }}
       />
@@ -92,12 +93,28 @@ export default async function PostPage({ params }: PostPageProps) {
         <h1 className="mt-3 text-4xl font-semibold leading-tight text-ocean-900 sm:text-5xl">{post.title}</h1>
         <p className="mt-4 text-xl leading-relaxed text-ink-soft">{post.subtitle}</p>
         <p className="mt-4 text-sm text-ink-soft">
-          Por {SITE.legalName} · Atualizado a <time dateTime={post.updated}>{formatDate(post.updated)}</time> · {minutes} min de leitura
+          Por Luciano Baetz · Atualizado a <time dateTime={post.updated}>{formatDate(post.updated)}</time> · {minutes} min de leitura
         </p>
 
         <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl">
           <Image src={post.cover.src} alt={post.cover.alt} fill priority sizes="(min-width: 768px) 768px, 100vw" className="object-cover" />
         </div>
+
+        {sections.length > 1 ? (
+          <nav aria-labelledby="neste-artigo" className="mt-8 rounded-2xl border border-sand-200 bg-white p-5">
+            <p id="neste-artigo" className="text-xs font-bold uppercase tracking-widest text-clove-600">Neste artigo</p>
+            <ol className="mt-3 space-y-1.5 text-[15px]">
+              {sections.map((section, index) => (
+                <li key={section.id} className="flex gap-3">
+                  <span className="w-5 shrink-0 font-semibold text-ink-soft">{index + 1}.</span>
+                  <a href={`#${section.id}`} className="font-semibold text-ocean-900 underline-offset-4 hover:text-clove-600 hover:underline">
+                    {section.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        ) : null}
 
         <div className="mt-8">
           <RichText blocks={withLeadForm(post.blocks)} source={post.slug} />
@@ -108,6 +125,17 @@ export default async function PostPage({ params }: PostPageProps) {
             <li key={tag} className="rounded-full border border-sand-200 px-3 py-1 text-sm text-ink-soft">#{tag}</li>
           ))}
         </ul>
+
+        <section aria-labelledby="autor" className="mt-10 flex gap-4 rounded-2xl border border-sand-200 bg-white p-5">
+          <span aria-hidden className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-ocean-900 font-display text-xl font-semibold text-white">LB</span>
+          <div>
+            <p id="autor" className="text-xs font-bold uppercase tracking-widest text-clove-600">Escrito por</p>
+            <p className="mt-1 font-display text-lg font-semibold text-ocean-900">Luciano Baetz · {SITE.legalName}</p>
+            <p className="mt-1 text-[15px] leading-relaxed text-ink-soft">
+              Organizamos viagens a Zanzibar com voo de Lisboa e tratamos de todo o processo, do primeiro contacto ao regresso.
+            </p>
+          </div>
+        </section>
 
         <aside className="mt-8 rounded-3xl bg-ocean-900 p-6 text-sand-100">
           <p className="font-display text-2xl font-semibold text-white">Quer viajar para Zanzibar?</p>

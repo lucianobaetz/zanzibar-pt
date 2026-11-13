@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { LeadCard } from "@/components/LeadCard";
 import { ZanzibarMap } from "@/components/ZanzibarMap";
 import type { Block } from "@/content/blog/types";
+import { slugify } from "@/content/blog/utils";
 
 // Inline format: **bold** and [text](/internal-path).
 const INLINE = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
@@ -31,7 +32,7 @@ export const RichText = ({ blocks, source = "" }: { blocks: readonly Block[]; so
       switch (block.type) {
         case "h2":
           return (
-            <h2 key={index} className="pt-6 font-display text-3xl font-semibold text-ocean-900">
+            <h2 key={index} id={slugify(block.text)} className="scroll-mt-24 pt-6 font-display text-3xl font-semibold text-ocean-900">
               {block.text}
             </h2>
           );

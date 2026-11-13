@@ -43,3 +43,15 @@ export const withLeadForm = (blocks: readonly Block[]): readonly Block[] => {
   const at = headings[Math.floor(headings.length / 2)] ?? blocks.length;
   return [...blocks.slice(0, at), { type: "lead" }, ...blocks.slice(at)];
 };
+
+export const slugify = (text: string): string =>
+  text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+/** Sections for the "Neste artigo" index. */
+export const outline = (blocks: readonly Block[]): { id: string; title: string }[] =>
+  blocks.flatMap((block) => (block.type === "h2" ? [{ id: slugify(block.text), title: block.text }] : []));
