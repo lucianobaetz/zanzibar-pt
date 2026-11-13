@@ -9,6 +9,7 @@ import { PriceConditions } from "@/components/PriceConditions";
 import { SearchBar } from "@/components/SearchBar";
 import { ZANZIBAR_FAQ, type Faq } from "@/content/faq";
 import { getHotel, HOTELS, type Hotel } from "@/content/hotels";
+import { AIRPORTS } from "@/lib/airports";
 import { departuresFor } from "@/lib/departures";
 import { absoluteUrl } from "@/lib/site";
 
@@ -68,7 +69,7 @@ export default async function HotelPage({ params }: HotelPageProps) {
 
   const url = absoluteUrl(`/hoteis/${hotel.slug}`);
   const faq = hotelFaq(hotel);
-  const bookingHotels = HOTELS.map((item) => ({ slug: item.slug, name: item.name, adultsOnly: item.adultsOnly, departures: departuresFor(item.slug) }));
+  const bookingHotels = HOTELS.map((item) => ({ slug: item.slug, name: item.name, adultsOnly: item.adultsOnly, departures: departuresFor(item.slug), byAirport: Object.fromEntries(AIRPORTS.map((airport) => [airport.code, departuresFor(item.slug, airport.code)])) }));
 
   const facts: ReadonlyArray<readonly [string, string]> = [
     ["Duração", "7 noites"],
@@ -170,7 +171,7 @@ export default async function HotelPage({ params }: HotelPageProps) {
         <section id="reservar" aria-labelledby="reservar-titulo" className="scroll-mt-32">
           <h2 id="reservar-titulo" className="text-3xl font-semibold text-ocean-900">Datas e preços 2027: peça a sua reserva</h2>
           <p className="mt-3 max-w-2xl text-ink-soft">
-            Partidas de Lisboa aos sábados, 7 noites em tudo incluído, com voo (1 escala), transfers e seguro. Escolha o hotel e a data, diga-nos quantos viajam e receba a confirmação por e-mail. Sem pagar online.
+            Partidas aos sábados de Lisboa e de outros sete aeroportos, 7 noites em tudo incluído, com voo (1 escala), transfers e seguro. Escolha o hotel e a data, diga-nos quantos viajam e receba a confirmação por e-mail. Sem pagar online.
           </p>
           <div className="mt-6">
             <BookingWidget hotels={bookingHotels} initialSlug={hotel.slug} />

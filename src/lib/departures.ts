@@ -1,3 +1,6 @@
+import type { AirportCode } from "@/lib/airports";
+import { OTHER_AIRPORTS } from "@/lib/departures-airports";
+
 // Departure months offered in 2027: two Saturday departures per month, except
 // March, April and May (rainy season in Zanzibar). Decision of 12 Nov 2026.
 // Dates and prices are the same as the Zanzibar trips on vamosfugir.pt (read 13 Nov 2026):
@@ -38,7 +41,10 @@ export const DEPARTURES: Readonly<Record<string, readonly Departure[]>> = {
   "tui-blue-bahari-zanzibar": series([2890, 2470, 2325, 2325, 2171, 2279, 2607, 2734, 2884, 2612, 2299, 2327, 2395, 2432]),
 };
 
-export const departuresFor = (slug: string): readonly Departure[] => DEPARTURES[slug] ?? [];
+// Other airports: TUI simulations of 13 Nov 2026 (same rules as Lisbon). A date missing for an
+// airport means TUI had no flights on sale for it.
+export const departuresFor = (slug: string, airport: AirportCode = "LIS"): readonly Departure[] =>
+  (airport === "LIS" ? DEPARTURES[slug] : OTHER_AIRPORTS[airport]?.[slug]) ?? [];
 
 export const lowestPrice = (slug: string): number | null => {
   const prices = departuresFor(slug).map((departure) => departure.price);

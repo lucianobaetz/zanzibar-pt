@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { AIRPORTS, airportForLanguages, airportLabel, isAirportCode, type AirportCode } from "@/lib/airports";
 import { formatEuro, LIMITS, longDate, validateBooking, type BookingErrors } from "@/lib/booking";
 
 export type BookingHotel = {
@@ -9,6 +10,8 @@ export type BookingHotel = {
   name: string;
   adultsOnly: boolean;
   departures: readonly { date: string; price: number }[];
+  // Departures from the other airports, by airport code.
+  byAirport: Readonly<Record<string, readonly { date: string; price: number }[]>>;
 };
 
 type BookingWidgetProps = { hotels: readonly BookingHotel[]; initialSlug?: string };
@@ -37,6 +40,7 @@ const weeksOf = (monthIndex: number): (number | null)[][] => {
 
 export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) => {
   const [slug, setSlug] = useState(initialSlug);
+  const [airport, setAirport] = useState<AirportCode>("LIS");
   const [date, setDate] = useState("");
   const [adults, setAdults] = useState(2);
   const [childAges, setChildAges] = useState<number[]>([]);
@@ -49,21 +53,46 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
   const [status, setStatus] = useState<Status>("idle");
   const [monthIndex, setMonthIndex] = useState(initialDefaultMonth(hotels, initialSlug));
 
+  // The suggested airport follows the browser language, unless the visitor chose one before.
+  useEffect(() => {
+    let saved: string | null = null;
+    try {
+      saved = window.localStorage.getItem("zanzibar-airport");
+    } catch {
+      saved = null;
+    }
+    setAirport(isAirportCode(saved) ? saved : airportForLanguages(window.navigator.languages?.length ? window.navigator.languages : [window.navigator.language]));
+  }, []);
+
   const hotel = hotels.find((item) => item.slug === slug);
-  const priceByDate = useMemo(() => new Map((hotel?.departures ?? []).map((departure) => [departure.date, departure.price])), [hotel]);
+  const departures = useMemo(() => (hotel ? (airport === "LIS" ? hotel.departures : hotel.byAirport[airport] ?? []) : []), [hotel, airport]);
+  const priceByDate = useMemo(() => new Map(departures.map((departure) => [departure.date, departure.price])), [departures]);
   const price = date ? priceByDate.get(date) : undefined;
-  const lowest = hotel ? Math.min(...hotel.departures.map((departure) => departure.price)) : null;
+  const lowest = departures.length ? Math.min(...departures.map((departure) => departure.price)) : null;
   const rules = useMemo(() => Object.fromEntries(hotels.map((item) => [item.slug, { adultsOnly: item.adultsOnly }])), [hotels]);
   // After the first send attempt, messages follow the form live and disappear as soon as a field is fixed.
-  const found = validateBooking({ hotelSlug: slug, date, adults, childAges, name, email, whatsapp, consent }, rules);
+  const found = validateBooking({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent }, rules);
   const errors: BookingErrors = submitted ? found : {};
 
   const chooseHotel = (next: string) => {
     setSlug(next);
     const nextHotel = hotels.find((item) => item.slug === next);
     if (nextHotel?.adultsOnly) setChildAges([]);
-    if (nextHotel && !nextHotel.departures.some((departure) => departure.date === date)) setDate("");
-    if (nextHotel && !date) setMonthIndex(Number(nextHotel.departures[0]?.date.slice(5, 7) ?? 1) - 1);
+    const nextDepartures = nextHotel ? departuresOf(nextHotel, airport) : [];
+    if (!nextDepartures.some((departure) => departure.date === date)) setDate("");
+    if (!date) setMonthIndex(Number(nextDepartures[0]?.date.slice(5, 7) ?? 1) - 1);
+  };
+
+  const chooseAirport = (next: AirportCode) => {
+    setAirport(next);
+    try {
+      window.localStorage.setItem("zanzibar-airport", next);
+    } catch {
+      // Private mode: the choice just is not remembered.
+    }
+    const nextDepartures = hotel ? departuresOf(hotel, next) : [];
+    if (!nextDepartures.some((departure) => departure.date === date)) setDate("");
+    if (!date) setMonthIndex(Number(nextDepartures[0]?.date.slice(5, 7) ?? 1) - 1);
   };
 
   const setChildren = (count: number) =>
@@ -79,7 +108,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
       const response = await fetch("/api/pedido", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hotelSlug: slug, date, adults, childAges, name, email, whatsapp, consent, website }),
+        body: JSON.stringify({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent, website }),
       });
       setStatus(response.ok ? "sent" : "error");
     } catch {
@@ -102,7 +131,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
   }
 
   const weeks = weeksOf(monthIndex);
-  const monthHasDeparture = (index: number) => (hotel?.departures ?? []).some((departure) => Number(departure.date.slice(5, 7)) === index + 1);
+  const monthHasDeparture = (index: number) => departures.some((departure) => Number(departure.date.slice(5, 7)) === index + 1);
   const adultsLabel = adults === 1 ? "1 adulto" : `${adults} adultos`;
 
   return (
@@ -111,6 +140,13 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-ink-soft">
           <span aria-hidden>▦</span> Datas de partida
         </h3>
+
+        <div className="mt-4">
+          <label htmlFor="aeroporto" className={label}>Aeroporto de partida</label>
+          <select id="aeroporto" value={airport} onChange={(event) => chooseAirport(event.target.value as AirportCode)} className={field}>
+            {AIRPORTS.map((item) => <option key={item.code} value={item.code}>{airportLabel(item.code)}</option>)}
+          </select>
+        </div>
 
         <div className="mt-4">
           <label htmlFor="hotel" className={label}>Hotel</label>
@@ -185,7 +221,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
           {!hotel
             ? "Escolha o hotel para ver as datas e os preços."
             : monthHasDeparture(monthIndex)
-              ? `Preço por pessoa, em quarto duplo, 7 noites tudo incluído, com voo de Lisboa.${lowest ? ` Desde ${formatEuro(lowest)}.` : ""}`
+              ? `Preço por pessoa, em quarto duplo, 7 noites tudo incluído, com voo de ${airport === "LIS" ? "Lisboa" : airportLabel(airport)}.${lowest ? ` Desde ${formatEuro(lowest)}.` : ""}`
               : "Sem partidas neste mês. Março a maio é época das chuvas; novembro e dezembro abrem quando a TUI tiver voos."}
         </p>
         {errors.date ? <p className={errorText}>{errors.date}</p> : null}
@@ -240,7 +276,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
         {hotel && date && price !== undefined ? (
           <div className="mt-5 rounded-2xl bg-lagoon-100/60 p-4 text-sm text-ocean-900" aria-live="polite">
             <p className="font-bold">{hotel.name}</p>
-            <p>{longDate(date)} · 7 noites · tudo incluído</p>
+            <p>{longDate(date)} · {airportLabel(airport)} · 7 noites · tudo incluído</p>
             <p className="mt-2 font-display text-xl font-semibold">
               {formatEuro(price * adults)} <span className="text-sm font-sans font-semibold text-ink-soft">para {adultsLabel} ({formatEuro(price)} por pessoa)</span>
             </p>
@@ -304,6 +340,10 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
     </form>
   );
 };
+
+function departuresOf(hotel: BookingHotel, airport: AirportCode): readonly { date: string; price: number }[] {
+  return airport === "LIS" ? hotel.departures : hotel.byAirport[airport] ?? [];
+}
 
 function initialDefaultMonth(hotels: readonly BookingHotel[], slug: string): number {
   const first = hotels.find((item) => item.slug === slug)?.departures[0]?.date;

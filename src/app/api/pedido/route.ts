@@ -1,5 +1,6 @@
 import { HOTELS } from "@/content/hotels";
 import { validateBooking, validateLead, normalizeWhatsapp, type BookingInput } from "@/lib/booking";
+import { isAirportCode } from "@/lib/airports";
 import { departuresFor } from "@/lib/departures";
 import { saveRequest, sendEmails, sendLeadEmails, type StoredLead, type StoredRequest } from "@/lib/pedidos";
 
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
   const childAges = Array.isArray(body.childAges) ? body.childAges.map(Number) : [];
   const input: BookingInput = {
     hotelSlug: text(body.hotelSlug, 80),
+    airport: (isAirportCode(body.airport) ? body.airport : "LIS"),
     date: text(body.date, 10),
     adults: Number(body.adults),
     childAges,
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
   if (Object.keys(errors).length > 0) return Response.json({ ok: false, errors }, { status: 400 });
 
   const hotel = HOTELS.find((item) => item.slug === input.hotelSlug);
-  const price = departuresFor(input.hotelSlug).find((departure) => departure.date === input.date)?.price;
+  const price = departuresFor(input.hotelSlug, input.airport).find((departure) => departure.date === input.date)?.price;
   if (!hotel || price === undefined) return Response.json({ ok: false, error: "Pedido inválido." }, { status: 400 });
 
   const stored: StoredRequest = { ...input, hotelName: hotel.name, pricePerPerson: price, receivedAt: new Date().toISOString(), ip };

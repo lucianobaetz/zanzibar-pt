@@ -1,6 +1,7 @@
 import { appendFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import nodemailer from "nodemailer";
+import { airportLabel } from "@/lib/airports";
 import { formatEuro, longDate, type BookingInput, type LeadInput } from "@/lib/booking";
 import { SITE } from "@/lib/site";
 
@@ -30,7 +31,7 @@ const summaryLines = (request: StoredRequest): string[] => {
   const children = request.childAges.length > 0 ? `${request.childAges.length} (idades: ${request.childAges.join(", ")})` : "0";
   return [
     `Hotel: ${request.hotelName}`,
-    `Partida de Lisboa: ${longDate(request.date)} · 7 noites · tudo incluído`,
+    `Partida de ${airportLabel(request.airport)}: ${longDate(request.date)} · 7 noites · tudo incluído`,
     `Adultos: ${request.adults}`,
     `Crianças: ${children}`,
     `Preço: ${formatEuro(request.pricePerPerson)} por pessoa (${formatEuro(request.pricePerPerson * request.adults)} para ${request.adults} adulto${request.adults === 1 ? "" : "s"}); crianças sob consulta`,
@@ -61,7 +62,7 @@ export const sendEmails = async (request: StoredRequest): Promise<boolean> => {
       `WhatsApp: ${request.whatsapp}`,
       "",
       "Cotar na TUI: https://pt.tui.com/single_product.php?pkt_id=33&Produto=Zanzibar&destino=TANZ%C3%82NIA",
-      "Partida: Lisboa · voo mais barato com 1 escala · quarto duplo.",
+      `Partida: ${airportLabel(request.airport)} · voo mais barato · quarto duplo.`,
     ].join("\n"),
   });
 

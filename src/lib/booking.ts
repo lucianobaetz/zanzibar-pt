@@ -2,12 +2,14 @@
 // The request is a pre-reservation: nothing is charged online and an agent confirms
 // availability and price with TUI before anything is confirmed.
 
+import { isAirportCode, type AirportCode } from "@/lib/airports";
 import { departuresFor } from "@/lib/departures";
 
 export const LIMITS = { maxAdults: 6, maxChildren: 4, maxChildAge: 11 } as const;
 
 export type BookingInput = {
   hotelSlug: string;
+  airport: AirportCode;
   date: string;
   adults: number;
   childAges: readonly number[];
@@ -17,7 +19,7 @@ export type BookingInput = {
   consent: boolean;
 };
 
-export type BookingErrors = Partial<Record<"hotelSlug" | "date" | "adults" | "children" | "name" | "email" | "whatsapp" | "consent", string>>;
+export type BookingErrors = Partial<Record<"hotelSlug" | "airport" | "date" | "adults" | "children" | "name" | "email" | "whatsapp" | "consent", string>>;
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -28,8 +30,9 @@ export const validateBooking = (input: BookingInput, hotelNames: Readonly<Record
   const hotel = hotelNames[input.hotelSlug];
 
   if (!hotel) errors.hotelSlug = "Escolha o hotel.";
+  if (!isAirportCode(input.airport)) errors.airport = "Escolha o aeroporto de partida.";
   if (!input.date) errors.date = "Escolha a data de partida no calendário.";
-  else if (hotel && !departuresFor(input.hotelSlug).some((departure) => departure.date === input.date)) {
+  else if (hotel && !departuresFor(input.hotelSlug, input.airport).some((departure) => departure.date === input.date)) {
     errors.date = "Essa data não está disponível para este hotel.";
   }
   if (!Number.isInteger(input.adults) || input.adults < 1 || input.adults > LIMITS.maxAdults) {
@@ -62,7 +65,7 @@ export type LeadErrors = Partial<Record<"name" | "email" | "whatsapp" | "consent
 /** Short form shown inside blog articles: the reader asks for dates and prices. */
 export const validateLead = (input: LeadInput): LeadErrors => {
   const { name, email, whatsapp, consent } = validateBooking(
-    { hotelSlug: "", date: "", adults: 2, childAges: [], ...input },
+    { hotelSlug: "", airport: "LIS", date: "", adults: 2, childAges: [], ...input },
     {},
   );
   return { name, email, whatsapp, consent };
