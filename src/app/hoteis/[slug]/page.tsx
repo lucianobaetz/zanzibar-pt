@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DepartureCalendar } from "@/components/DepartureCalendar";
+import { BookingWidget } from "@/components/BookingWidget";
 import { FaqSection } from "@/components/FaqSection";
 import { HotelGallery } from "@/components/HotelGallery";
 import { JsonLd } from "@/components/JsonLd";
@@ -9,7 +9,8 @@ import { PriceConditions } from "@/components/PriceConditions";
 import { SearchBar } from "@/components/SearchBar";
 import { ZANZIBAR_FAQ, type Faq } from "@/content/faq";
 import { getHotel, HOTELS, type Hotel } from "@/content/hotels";
-import { absoluteUrl, mailtoUrl, SITE, whatsappUrl } from "@/lib/site";
+import { departuresFor } from "@/lib/departures";
+import { absoluteUrl } from "@/lib/site";
 
 type HotelPageProps = { params: Promise<{ slug: string }> };
 
@@ -55,7 +56,7 @@ const hotelFaq = (hotel: Hotel): readonly Faq[] => [
 const SECTIONS = [
   { id: "fotos", label: "Fotos" },
   { id: "sobre", label: "Sobre o hotel" },
-  { id: "datas", label: "Datas e preços" },
+  { id: "reservar", label: "Datas e reserva" },
   { id: "inclui", label: "O que inclui" },
   { id: "perguntas", label: "Perguntas" },
 ] as const;
@@ -66,8 +67,8 @@ export default async function HotelPage({ params }: HotelPageProps) {
   if (!hotel) notFound();
 
   const url = absoluteUrl(`/hoteis/${hotel.slug}`);
-  const request = `Olá! Quero pedir uma reserva para o ${hotel.name} em Zanzibar. Datas pretendidas, número de adultos e crianças (com idades):`;
   const faq = hotelFaq(hotel);
+  const bookingHotels = HOTELS.map((item) => ({ slug: item.slug, name: item.name, adultsOnly: item.adultsOnly, departures: departuresFor(item.slug) }));
 
   const facts: ReadonlyArray<readonly [string, string]> = [
     ["Duração", "7 noites"],
@@ -124,7 +125,7 @@ export default async function HotelPage({ params }: HotelPageProps) {
             <h1 className="mt-1 text-4xl font-semibold text-ocean-900 sm:text-5xl">{hotel.name}: tudo incluído com voo de Lisboa</h1>
           </div>
           <a
-            href="#pedir"
+            href="#reservar"
             className="rounded-full bg-clove-500 px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-clove-600 lg:hidden"
           >
             Pedir reserva
@@ -146,7 +147,7 @@ export default async function HotelPage({ params }: HotelPageProps) {
         </nav>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-10 px-5 py-12 lg:grid-cols-[1fr_22rem]">
+      <div className="mx-auto max-w-6xl px-5 py-12">
         <div className="min-w-0 space-y-14">
           <section id="sobre" aria-labelledby="sobre-titulo" className="scroll-mt-32">
             <h2 id="sobre-titulo" className="text-3xl font-semibold text-ocean-900">Sobre o {hotel.name}</h2>
@@ -166,10 +167,18 @@ export default async function HotelPage({ params }: HotelPageProps) {
             </dl>
           </section>
 
-          <section id="datas" aria-labelledby="datas-titulo" className="scroll-mt-32">
-            <h2 id="datas-titulo" className="text-3xl font-semibold text-ocean-900">Datas e preços 2027 do {hotel.name}</h2>
-            <DepartureCalendar slug={hotel.slug} hotelName={hotel.name} />
-          </section>
+        <section id="reservar" aria-labelledby="reservar-titulo" className="scroll-mt-32">
+          <h2 id="reservar-titulo" className="text-3xl font-semibold text-ocean-900">Datas e preços 2027: peça a sua reserva</h2>
+          <p className="mt-3 max-w-2xl text-ink-soft">
+            Partidas de Lisboa aos sábados, 7 noites em tudo incluído, com voo (1 escala), transfers e seguro. Escolha o hotel e a data, diga-nos quantos viajam e receba a confirmação por e-mail. Sem pagar online.
+          </p>
+          <div className="mt-6">
+            <BookingWidget hotels={bookingHotels} initialSlug={hotel.slug} />
+          </div>
+          <p className="mt-4 text-sm text-ink-soft">
+            Preços por pessoa, em quarto duplo, sujeitos a disponibilidade. Criança: preço sob consulta. Não vendemos partidas de março a maio (época das chuvas); novembro e dezembro de 2027 abrem quando a TUI tiver voos.
+          </p>
+        </section>
 
           <section id="inclui" aria-label="O que inclui" className="scroll-mt-32">
             <PriceConditions />
@@ -180,32 +189,6 @@ export default async function HotelPage({ params }: HotelPageProps) {
           </div>
         </div>
 
-        <aside id="pedir" className="h-fit scroll-mt-28 rounded-3xl border border-sand-200 bg-white p-6 shadow-sm lg:sticky lg:top-36">
-          <p className="text-sm font-bold text-ocean-900">
-            {hotel.fromPrice === null ? "Preço sob pedido" : `desde ${hotel.fromPrice} € por pessoa`}
-          </p>
-          <h2 className="mt-1 font-display text-xl font-semibold text-ocean-900">Pedir reserva</h2>
-          <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-            Sem pagar online. Enviamos-lhe a proposta e o agente confirma disponibilidade e preço antes de a reserva ficar
-            confirmada.
-          </p>
-          <a
-            href={whatsappUrl(request)}
-            rel="noopener"
-            className="mt-5 block rounded-full bg-clove-500 px-5 py-3 text-center font-bold text-white transition-colors hover:bg-clove-600"
-          >
-            Pedir no WhatsApp
-          </a>
-          <a
-            href={mailtoUrl(`Pedido de reserva: ${hotel.name}`, request)}
-            className="mt-3 block rounded-full border border-ocean-900/20 px-5 py-3 text-center font-bold text-ocean-900 transition-colors hover:bg-sand-100"
-          >
-            Pedir por e-mail
-          </a>
-          <p className="mt-4 text-center text-xs text-ink-soft">
-            Ou ligue <a href={`tel:${SITE.phone}`} className="font-bold underline-offset-2 hover:underline">{SITE.phoneDisplay}</a>
-          </p>
-        </aside>
       </div>
 
       <section aria-label="Pesquisar outros hotéis" className="mx-auto max-w-6xl px-5 pb-4">
