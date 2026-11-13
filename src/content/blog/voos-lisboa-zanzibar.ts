@@ -8,6 +8,10 @@ export const voosLisboaZanzibar: Post = {
   description:
     "Quantas horas são de Lisboa a Zanzibar? Distância, escalas, tempo total de viagem e o que esperar de um voo regular em classe económica.",
   excerpt: "Distância, escalas e tempo total de viagem entre Lisboa e Zanzibar, explicados sem rodeios.",
+  subtitle: "Quanto dura a viagem, como funcionam as escalas e o que esperar do voo.",
+  category: "Planear a viagem",
+  tags: ["voos", "Lisboa", "escalas"],
+  status: "published",
   keywords: ["zanzibar horas de voo", "voos zanzibar", "voos lisboa zanzibar"],
   published: "2026-11-13",
   updated: "2026-11-13",

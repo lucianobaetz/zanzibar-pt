@@ -8,6 +8,10 @@ export const ondeFicaZanzibar: Post = {
   description:
     "Onde fica Zanzibar, em que país está e como é a ilha. Mapa simples, as zonas de praia (Nungwi, Kiwengwa, Paje) e como chegar desde Portugal.",
   excerpt: "Em que país fica, a que distância está de Lisboa e como se divide a ilha, com um mapa simples das zonas de praia.",
+  subtitle: "Em que país fica, a que distância está de Lisboa e como escolher a zona da ilha.",
+  category: "Planear a viagem",
+  tags: ["localização", "mapa", "Tanzânia"],
+  status: "published",
   keywords: ["zanzibar onde fica", "onde fica zanzibar", "zanzibar mapa"],
   published: "2026-11-13",
   updated: "2026-11-13",

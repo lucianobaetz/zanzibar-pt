@@ -12,6 +12,10 @@ export const zanzibarECaro: Post = {
   description:
     "Quanto custa uma viagem a Zanzibar saindo de Lisboa? Preços desde por pessoa, o que está incluído, o que paga à parte e como poupar.",
   excerpt: "Quanto custa uma semana em Zanzibar com voo de Lisboa, o que o preço inclui e o que ficará por pagar.",
+  subtitle: "Quanto custa a viagem, o que está incluído e onde se gasta mais.",
+  category: "Orçamento",
+  tags: ["preços", "tudo incluído", "custos"],
+  status: "published",
   keywords: ["zanzibar é caro", "quanto custa viagem zanzibar", "preço viagem zanzibar"],
   published: "2026-11-13",
   updated: "2026-11-13",

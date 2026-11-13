@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { POSTS } from "@/content/blog";
+import { readingMinutes } from "@/content/blog/utils";
 import { absoluteUrl } from "@/lib/site";
 
 const TITLE = "Blog de viagens a Zanzibar";
@@ -48,7 +49,10 @@ export default function BlogIndexPage() {
                   />
                 </div>
                 <div className="p-5">
-                  <h2 className="text-xl font-semibold text-ocean-900">{post.title}</h2>
+                  <p className="text-xs font-bold uppercase tracking-wider text-clove-600">
+                    {post.category} · {readingMinutes(post)} min
+                  </p>
+                  <h2 className="mt-1 text-xl font-semibold text-ocean-900">{post.title}</h2>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{post.excerpt}</p>
                   <span className="mt-4 inline-block text-sm font-bold text-clove-600">Ler o guia →</span>
                 </div>

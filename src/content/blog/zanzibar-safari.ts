@@ -8,6 +8,10 @@ export const zanzibarSafari: Post = {
   description:
     "Há safari em Zanzibar? Saiba o que pode ver na ilha (Jozani, tartarugas, golfinhos) e como fazer um safari a sério na Tanzânia continental.",
   excerpt: "Em Zanzibar não há leões nem elefantes, mas há passeios de natureza. E o safari a sério fica a um voo curto.",
+  subtitle: "Como chegar aos parques da Tanzânia a partir da ilha.",
+  category: "O que fazer",
+  tags: ["safari", "Tanzânia", "parques"],
+  status: "published",
   keywords: ["zanzibar safari", "safari zanzibar", "safari tanzânia"],
   published: "2026-11-13",
   updated: "2026-11-13",

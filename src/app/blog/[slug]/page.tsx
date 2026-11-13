@@ -6,6 +6,7 @@ import { FaqSection } from "@/components/FaqSection";
 import { JsonLd } from "@/components/JsonLd";
 import { RichText } from "@/components/RichText";
 import { getPost, POSTS } from "@/content/blog";
+import { readingMinutes, relatedPosts } from "@/content/blog/utils";
 import { absoluteUrl, SITE } from "@/lib/site";
 
 type PostPageProps = { params: Promise<{ slug: string }> };
@@ -30,7 +31,9 @@ export const generateMetadata = async ({ params }: PostPageProps): Promise<Metad
       url: path,
       publishedTime: post.published,
       modifiedTime: post.updated,
-      images: [{ url: post.cover.src, alt: post.cover.alt }],
+      images: [{ url: post.ogImage ?? post.cover.src, alt: post.cover.alt }],
+      tags: [...post.tags],
+      section: post.category,
     },
   };
 };
@@ -44,6 +47,8 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) notFound();
 
   const url = absoluteUrl(`/blog/${post.slug}`);
+  const minutes = readingMinutes(post);
+  const more = relatedPosts(post, POSTS);
 
   return (
     <>
@@ -53,7 +58,10 @@ export default async function PostPage({ params }: PostPageProps) {
           "@type": "BlogPosting",
           headline: post.title,
           description: post.description,
-          image: absoluteUrl(post.cover.src),
+          image: absoluteUrl(post.ogImage ?? post.cover.src),
+          alternativeHeadline: post.subtitle,
+          articleSection: post.category,
+          keywords: post.keywords.join(", "),
           datePublished: post.published,
           dateModified: post.updated,
           inLanguage: SITE.locale,
@@ -78,9 +86,13 @@ export default async function PostPage({ params }: PostPageProps) {
         <nav aria-label="Localização" className="text-sm text-ink-soft">
           <Link href="/" className="hover:underline">Início</Link> / <Link href="/blog" className="hover:underline">Blog</Link>
         </nav>
+        <p className="mt-6 inline-block rounded-full bg-ocean-900/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-ocean-900">
+          {post.category}
+        </p>
         <h1 className="mt-3 text-4xl font-semibold leading-tight text-ocean-900 sm:text-5xl">{post.title}</h1>
-        <p className="mt-3 text-sm text-ink-soft">
-          Por {SITE.legalName} · Atualizado a <time dateTime={post.updated}>{formatDate(post.updated)}</time>
+        <p className="mt-4 text-xl leading-relaxed text-ink-soft">{post.subtitle}</p>
+        <p className="mt-4 text-sm text-ink-soft">
+          Por {SITE.legalName} · Atualizado a <time dateTime={post.updated}>{formatDate(post.updated)}</time> · {minutes} min de leitura
         </p>
 
         <div className="relative mt-6 aspect-[16/9] overflow-hidden rounded-3xl">
@@ -91,7 +103,13 @@ export default async function PostPage({ params }: PostPageProps) {
           <RichText blocks={post.blocks} />
         </div>
 
-        <aside className="mt-12 rounded-3xl bg-ocean-900 p-6 text-sand-100">
+        <ul className="mt-10 flex flex-wrap gap-2" aria-label="Etiquetas">
+          {post.tags.map((tag) => (
+            <li key={tag} className="rounded-full border border-sand-200 px-3 py-1 text-sm text-ink-soft">#{tag}</li>
+          ))}
+        </ul>
+
+        <aside className="mt-8 rounded-3xl bg-ocean-900 p-6 text-sand-100">
           <p className="font-display text-2xl font-semibold text-white">Quer viajar para Zanzibar?</p>
           <ul className="mt-4 space-y-2">
             {post.related.map((link) => (
@@ -108,6 +126,25 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="mx-auto mt-16 max-w-3xl px-5">
         <FaqSection id="perguntas" title="Perguntas frequentes" items={post.faq} />
       </div>
+
+      <section className="mx-auto mt-16 max-w-6xl px-5 pb-4" aria-labelledby="mais-guias">
+        <h2 id="mais-guias" className="text-2xl font-semibold text-ocean-900">Continue a ler</h2>
+        <ul className="mt-6 grid gap-6 sm:grid-cols-3">
+          {more.map((other) => (
+            <li key={other.slug} className="overflow-hidden rounded-3xl border border-sand-200 bg-white shadow-sm transition-shadow hover:shadow-lg">
+              <Link href={`/blog/${other.slug}`} className="block">
+                <div className="relative aspect-[4/3]">
+                  <Image src={other.cover.src} alt={other.cover.alt} fill sizes="(min-width: 640px) 33vw, 100vw" className="object-cover" />
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-bold uppercase tracking-wider text-clove-600">{other.category}</p>
+                  <h3 className="mt-1 text-lg font-semibold text-ocean-900">{other.title}</h3>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
     </>
   );
 }

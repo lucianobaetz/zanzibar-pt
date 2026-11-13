@@ -8,6 +8,10 @@ export const oQueFazerEmZanzibar: Post = {
   description:
     "O que visitar e fazer em Zanzibar: praias, Stone Town, The Rock, kitesurf, tour das especiarias, passeios de barco e mais.",
   excerpt: "As praias, a cidade histórica e os passeios que mais valem a pena numa semana em Zanzibar.",
+  subtitle: "Praias, Stone Town, ilhas e passeios: o essencial para uma semana.",
+  category: "O que fazer",
+  tags: ["passeios", "praias", "Stone Town"],
+  status: "published",
   keywords: ["zanzibar o que visitar", "o que fazer em zanzibar", "o que ver em zanzibar"],
   published: "2026-11-13",
   updated: "2026-11-13",

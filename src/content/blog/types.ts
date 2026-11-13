@@ -17,6 +17,14 @@ export type Post = {
   /** <title> tag, up to about 60 characters. */
   seoTitle: string;
   description: string;
+  /** One line under the H1 that sums up the idea. */
+  subtitle: string;
+  category: string;
+  tags: readonly string[];
+  /** Only "published" posts with a date in the past are shown and indexed. */
+  status: "draft" | "published";
+  /** Optional social-share image (1200x630); falls back to the cover. */
+  ogImage?: string;
   /** Short text for the blog index card. */
   excerpt: string;
   keywords: readonly string[];

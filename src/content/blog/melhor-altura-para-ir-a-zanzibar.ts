@@ -8,6 +8,10 @@ export const melhorAlturaZanzibar: Post = {
   description:
     "Quando ir a Zanzibar? O tempo mês a mês, a época das chuvas, a época seca e as datas de partida de Lisboa em 2027.",
   excerpt: "Quando chove, quando faz mais calor e quais os melhores meses para a praia, com as datas em que há partidas em 2027.",
+  subtitle: "Clima, mar e preços mês a mês, e as datas de partida de Lisboa em 2027.",
+  category: "Planear a viagem",
+  tags: ["clima", "épocas", "2027"],
+  status: "published",
   keywords: ["melhor altura para ir a zanzibar", "quando ir a zanzibar", "melhor altura para visitar zanzibar", "tempo zanzibar"],
   published: "2026-11-13",
   updated: "2026-11-13",

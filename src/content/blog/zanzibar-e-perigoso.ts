@@ -8,6 +8,10 @@ export const zanzibarEPerigoso: Post = {
   description:
     "Zanzibar é seguro? O que saber sobre segurança, saúde, seguro de viagem e conselhos oficiais antes de viajar para Zanzibar a partir de Portugal.",
   excerpt: "Uma resposta honesta sobre segurança em Zanzibar, incluindo a instabilidade recente na Tanzânia e o que verificar antes de partir.",
+  subtitle: "Segurança, saúde e conselhos oficiais, com honestidade.",
+  category: "Segurança e saúde",
+  tags: ["segurança", "saúde", "conselhos"],
+  status: "published",
   keywords: ["zanzibar é perigoso", "zanzibar é seguro", "segurança zanzibar"],
   published: "2026-11-13",
   updated: "2026-11-13",

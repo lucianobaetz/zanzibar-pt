@@ -11,7 +11,7 @@ import { zanzibarSafari } from "./zanzibar-safari";
 
 export type { Post } from "./types";
 
-export const POSTS: readonly Post[] = [
+const ALL_POSTS: readonly Post[] = [
   ondeFicaZanzibar,
   melhorAlturaZanzibar,
   voosLisboaZanzibar,
@@ -22,5 +22,10 @@ export const POSTS: readonly Post[] = [
   zanzibarEPerigoso,
   zanzibarSafari,
 ];
+
+const today = () => new Date().toISOString().slice(0, 10);
+
+/** Published posts whose date has arrived: the only ones listed, routed and indexed. */
+export const POSTS: readonly Post[] = ALL_POSTS.filter((post) => post.status === "published" && post.published <= today());
 
 export const getPost = (slug: string): Post | undefined => POSTS.find((post) => post.slug === slug);
