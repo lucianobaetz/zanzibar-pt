@@ -3,7 +3,11 @@
 // availability and price with TUI before anything is confirmed.
 
 import { isAirportCode, type AirportCode } from "@/lib/airports";
+import { fmt } from "@/i18n/messages";
+import { pt } from "@/i18n/messages/pt";
 import { departuresFor } from "@/lib/departures";
+
+export type BookingMessages = { readonly [K in keyof typeof pt.booking.errors]: string };
 
 export const LIMITS = { maxAdults: 6, maxChildren: 4, maxChildAge: 11 } as const;
 
@@ -25,39 +29,41 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export const normalizeWhatsapp = (value: string): string => value.replace(/[\s().-]/g, "");
 
-export const validateBooking = (input: BookingInput, hotelNames: Readonly<Record<string, { adultsOnly: boolean }>>): BookingErrors => {
+export const validateBooking = (input: BookingInput, hotelNames: Readonly<Record<string, { adultsOnly: boolean }>>, m: BookingMessages = pt.booking.errors): BookingErrors => {
   const errors: BookingErrors = {};
   const hotel = hotelNames[input.hotelSlug];
 
-  if (!hotel) errors.hotelSlug = "Escolha o hotel.";
-  if (!isAirportCode(input.airport)) errors.airport = "Escolha o aeroporto de partida.";
-  if (!input.date) errors.date = "Escolha a data de partida no calendário.";
+  if (!hotel) errors.hotelSlug = m.hotel;
+  if (!isAirportCode(input.airport)) errors.airport = m.airport;
+  if (!input.date) errors.date = m.date;
   else if (hotel && !departuresFor(input.hotelSlug, input.airport).some((departure) => departure.date === input.date)) {
-    errors.date = "Essa data não está disponível para este hotel.";
+    errors.date = m.dateUnavailable;
   }
   if (!Number.isInteger(input.adults) || input.adults < 1 || input.adults > LIMITS.maxAdults) {
-    errors.adults = `Indique entre 1 e ${LIMITS.maxAdults} adultos.`;
+    errors.adults = fmt(m.adults, { max: LIMITS.maxAdults });
   }
-  if (input.childAges.length > LIMITS.maxChildren) errors.children = `No máximo ${LIMITS.maxChildren} crianças.`;
-  else if (hotel?.adultsOnly && input.childAges.length > 0) errors.children = "Este hotel é só para adultos.";
+  if (input.childAges.length > LIMITS.maxChildren) errors.children = fmt(m.childrenMax, { max: LIMITS.maxChildren });
+  else if (hotel?.adultsOnly && input.childAges.length > 0) errors.children = m.adultsOnly;
   else if (input.childAges.some((age) => !Number.isInteger(age) || age < 0 || age > LIMITS.maxChildAge)) {
-    errors.children = "Indique a idade de cada criança.";
+    errors.children = m.childAges;
   }
-  if (input.name.trim().length < 2 || input.name.length > 100) errors.name = "Indique o seu nome.";
-  if (!EMAIL.test(input.email.trim()) || input.email.length > 120) errors.email = "Indique um e-mail válido.";
-  if (!/^\+?\d{9,15}$/.test(normalizeWhatsapp(input.whatsapp))) errors.whatsapp = "Indique um número de WhatsApp válido, com indicativo (ex.: +351 912 345 678).";
-  if (!input.consent) errors.consent = "Precisamos da sua autorização para tratar o pedido.";
+  if (input.name.trim().length < 2 || input.name.length > 100) errors.name = m.name;
+  if (!EMAIL.test(input.email.trim()) || input.email.length > 120) errors.email = m.email;
+  if (!/^\+?\d{9,15}$/.test(normalizeWhatsapp(input.whatsapp))) errors.whatsapp = m.whatsapp;
+  if (!input.consent) errors.consent = m.consent;
   return errors;
 };
 
-const MONTHS = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"] as const;
+const LANG: Record<string, string> = { pt: "pt-PT", es: "es-ES", fr: "fr-FR", en: "en-GB", de: "de-DE" };
 
-export const longDate = (iso: string): string => {
+export const longDate = (iso: string, locale = "pt"): string => {
   const [year, month, day] = iso.split("-").map(Number);
-  return `sábado, ${day} de ${MONTHS[(month ?? 1) - 1]} de ${year}`;
+  const date = new Date(Date.UTC(year ?? 2027, (month ?? 1) - 1, day ?? 1));
+  const text = new Intl.DateTimeFormat(LANG[locale] ?? "pt-PT", { weekday: "long", day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date);
+  return text;
 };
 
-export const formatEuro = (value: number): string => `${value.toLocaleString("pt-PT")} €`;
+export const formatEuro = (value: number, locale = "pt"): string => `${value.toLocaleString(LANG[locale] ?? "pt-PT")} €`;
 
 export type LeadInput = { name: string; email: string; whatsapp: string; consent: boolean; source: string };
 export type LeadErrors = Partial<Record<"name" | "email" | "whatsapp" | "consent", string>>;

@@ -5,7 +5,7 @@
 
 import { lowestPrice } from "@/lib/departures";
 
-export type HotelImage = { src: string; alt: string };
+export type HotelImage = { src: string; alt: string; caption: string };
 
 export type Hotel = {
   slug: string;
@@ -29,6 +29,7 @@ const photos = (slug: string, name: string, captions: readonly string[]): HotelI
   captions.map((caption, index) => ({
     src: `/images/hoteis/${slug}/${String(index + 1).padStart(2, "0")}.webp`,
     alt: `${name}, Zanzibar: ${caption}`,
+    caption,
   }));
 
 export const HOTELS: readonly Hotel[] = [

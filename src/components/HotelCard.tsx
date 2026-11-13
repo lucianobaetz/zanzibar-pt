@@ -1,16 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Hotel } from "@/content/hotels";
+import { departureLabel, type HotelView } from "@/i18n/localize";
+import { DEFAULT_LOCALE, type LocaleCode } from "@/i18n/locales";
+import { fmt, getMessages } from "@/i18n/messages";
+import { pathFor } from "@/i18n/routes";
 
-type HotelCardProps = { hotel: Hotel; priority?: boolean };
+type HotelCardProps = { hotel: HotelView; priority?: boolean; locale?: LocaleCode };
 
 // Result card. On phones it is a compact row (photo left, text beside it, price in a dark box,
 // like Logitravel); from tablets up it grows into the Booking-style card with details and thumbnails.
 // The hotel name is never printed over the photo.
-export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
+export const HotelCard = ({ hotel, priority = false, locale = DEFAULT_LOCALE }: HotelCardProps) => {
+  const t = getMessages(locale).card;
+  const from = departureLabel(locale);
   const [cover, ...rest] = hotel.images;
-  const href = `/hoteis/${hotel.slug}`;
-  const priceLabel = hotel.fromPrice === null ? "Preço sob pedido" : `desde ${hotel.fromPrice} €`;
+  const href = pathFor(locale, "hotel", hotel.slug);
+  const priceLabel = hotel.fromPrice === null ? t.onRequest : fmt(t.from, { price: hotel.fromPrice });
 
   return (
     <article className="group grid grid-cols-[8.5rem_1fr] overflow-hidden rounded-2xl border border-sand-200 bg-white shadow-sm transition-shadow hover:shadow-lg sm:grid-cols-[11rem_1fr] md:grid-cols-[19rem_1fr] md:rounded-3xl">
@@ -27,7 +32,7 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
         ) : null}
         {hotel.adultsOnly ? (
           <span className="absolute left-2 top-2 rounded-full bg-ocean-900/90 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white md:left-3 md:top-3 md:px-3 md:py-1 md:text-xs">
-            Só adultos
+            {t.adultsOnly}
           </span>
         ) : null}
       </Link>
@@ -42,9 +47,9 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
           <p className="mt-0.5 text-sm text-ink-soft md:order-first md:mb-1 md:mt-0 md:text-xs md:font-bold md:uppercase md:tracking-widest md:text-lagoon-500">
             {[hotel.area, hotel.coast].filter(Boolean).join(" · ")}
           </p>
-          <p className="mt-1 text-sm font-semibold text-lagoon-600 md:hidden">Tudo incluído · 7 noites</p>
+          <p className="mt-1 text-sm font-semibold text-lagoon-600 md:hidden">{t.mobileLine}</p>
           <p className="mt-2 hidden text-sm leading-relaxed text-ink-soft md:block">{hotel.intro}</p>
-          <ul className="mt-3 hidden flex-wrap gap-2 md:flex" aria-label={`Destaques do ${hotel.name}`}>
+          <ul className="mt-3 hidden flex-wrap gap-2 md:flex" aria-label={fmt(t.highlightsAria, { name: hotel.name })}>
             {hotel.highlights.map((item) => (
               <li key={item} className="rounded-full bg-lagoon-100/70 px-3 py-1 text-xs font-semibold text-ocean-700">
                 {item}
@@ -64,11 +69,11 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
 
         {/* Phones: voo + dark price box, as on Logitravel. */}
         <div className="flex items-end justify-between gap-2 md:hidden">
-          <p className="text-xs text-ink-soft">Voo desde Lisboa</p>
+          <p className="text-xs text-ink-soft">{fmt(t.flightFrom, { from })}</p>
           <Link href={href} className="rounded-sm bg-ink px-3 py-1.5 text-right text-white">
-            <span className="block text-[10px] leading-none text-white/80">{hotel.fromPrice === null ? "Preço" : "desde, por pessoa"}</span>
+            <span className="block text-[10px] leading-none text-white/80">{hotel.fromPrice === null ? t.mobilePrice : t.mobileFrom}</span>
             <span className="block whitespace-nowrap font-display text-base font-semibold leading-tight">
-              {hotel.fromPrice === null ? "sob pedido" : `${hotel.fromPrice}€`}
+              {hotel.fromPrice === null ? t.mobileOnRequest : `${hotel.fromPrice}€`}
             </span>
           </Link>
         </div>
@@ -76,15 +81,15 @@ export const HotelCard = ({ hotel, priority = false }: HotelCardProps) => {
         {/* Tablet and desktop. */}
         <div className="hidden shrink-0 flex-row items-end justify-between gap-4 border-t border-sand-200 pt-4 md:flex lg:w-48 lg:flex-col lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0 lg:text-right">
           <div>
-            <p className="text-xs text-ink-soft">7 noites · voo de Lisboa</p>
+            <p className="text-xs text-ink-soft">{fmt(t.nightsFlight, { from })}</p>
             <p className="font-display text-lg font-semibold text-ocean-900">{priceLabel}</p>
-            {hotel.fromPrice === null ? null : <p className="text-xs text-ink-soft">por pessoa</p>}
+            {hotel.fromPrice === null ? null : <p className="text-xs text-ink-soft">{t.perPerson}</p>}
           </div>
           <Link
             href={href}
             className="rounded-full bg-clove-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-clove-600"
           >
-            Ver o hotel
+            {t.seeHotel}
           </Link>
         </div>
       </div>

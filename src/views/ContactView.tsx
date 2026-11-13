@@ -1,26 +1,20 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { DEFAULT_LOCALE, type LocaleCode } from "@/i18n/locales";
+import { fmt, getMessages } from "@/i18n/messages";
+import { pathFor } from "@/i18n/routes";
 import { absoluteUrl, mailtoUrl, SITE, whatsappUrl } from "@/lib/site";
 
-const TITLE = "Contactos: viagens a Zanzibar";
-const DESCRIPTION = "Fale connosco sobre a sua viagem a Zanzibar: WhatsApp, telefone e e-mail. Vamos Fugir, licença RNAVT 4155.";
-
-export const metadata: Metadata = {
-  title: TITLE,
-  description: DESCRIPTION,
-  alternates: { canonical: "/contacto" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/contacto" },
-};
-
-export default function ContactPage() {
+export const ContactView = ({ locale = DEFAULT_LOCALE }: { locale?: LocaleCode }) => {
+  const t = getMessages(locale).contact;
+  const common = getMessages(locale).common;
   return (
     <>
       <JsonLd
         data={{
           "@context": "https://schema.org",
           "@type": "ContactPage",
-          url: absoluteUrl("/contacto"),
+          url: absoluteUrl(pathFor(locale, "contact")),
           mainEntity: {
             "@type": "TravelAgency",
             name: SITE.legalName,
@@ -30,16 +24,16 @@ export default function ContactPage() {
         }}
       />
       <div className="mx-auto max-w-3xl px-5 py-14">
-        <h1 className="text-4xl font-semibold text-ocean-900 sm:text-5xl">Contactos</h1>
+        <h1 className="text-4xl font-semibold text-ocean-900 sm:text-5xl">{t.h1}</h1>
         <p className="mt-4 text-lg text-ink-soft">
-          Tem dúvidas sobre a sua viagem a Zanzibar? Escreva-nos ou ligue. Respondemos o mais depressa possível.
+          {t.lead}
         </p>
 
         <ul className="mt-8 grid gap-4 sm:grid-cols-3">
           <li className="rounded-3xl border border-sand-200 bg-white p-5">
             <p className="text-xs font-bold uppercase tracking-widest text-lagoon-500">WhatsApp</p>
             <a
-              href={whatsappUrl("Olá! Quero saber mais sobre as viagens para Zanzibar.")}
+              href={whatsappUrl(t.whatsappMessage)}
               rel="noopener"
               className="mt-2 inline-block font-semibold text-clove-600 underline underline-offset-4"
             >
@@ -47,7 +41,7 @@ export default function ContactPage() {
             </a>
           </li>
           <li className="rounded-3xl border border-sand-200 bg-white p-5">
-            <p className="text-xs font-bold uppercase tracking-widest text-lagoon-500">Telefone</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-lagoon-500">{t.phone}</p>
             <a href={`tel:${SITE.phone}`} className="mt-2 inline-block font-semibold text-clove-600 underline underline-offset-4">
               {SITE.phoneDisplay}
             </a>
@@ -55,7 +49,7 @@ export default function ContactPage() {
           <li className="rounded-3xl border border-sand-200 bg-white p-5">
             <p className="text-xs font-bold uppercase tracking-widest text-lagoon-500">E-mail</p>
             <a
-              href={mailtoUrl("Viagem a Zanzibar", "Olá! Gostava de saber mais sobre as viagens a Zanzibar.")}
+              href={mailtoUrl(t.mailSubject, t.mailBody)}
               className="mt-2 inline-block break-all font-semibold text-clove-600 underline underline-offset-4"
             >
               {SITE.email}
@@ -64,14 +58,14 @@ export default function ContactPage() {
         </ul>
 
         <p className="mt-8 leading-relaxed text-ink-soft">
-          Este site é propriedade da {SITE.legalName}, licença RNAVT n.º {SITE.rnavt}. Para pedir uma reserva, escolha um
-          <Link href="/hoteis" className="font-semibold text-clove-600 underline underline-offset-4"> hotel </Link>
-          e uma data. Não paga nada online.
+          {fmt(t.legalA, { legalName: SITE.legalName, rnavt: SITE.rnavt })}
+          <Link href={pathFor(locale, "hotels")} className="font-semibold text-clove-600 underline underline-offset-4">{t.legalLink}</Link>
+          {t.legalB}
         </p>
         <p className="mt-3 text-sm text-ink-soft">
-          Como tratamos os seus dados: <Link href="/privacidade" className="underline">política de privacidade</Link>.
+          {t.dataNote} <Link href="/privacidade" className="underline">{common.privacyLink}</Link>.
         </p>
       </div>
     </>
   );
-}
+};

@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { AIRPORTS, airportForLanguages, airportLabel, isAirportCode, type AirportCode } from "@/lib/airports";
+import { DEFAULT_LOCALE, type LocaleCode } from "@/i18n/locales";
+import { fmt, getMessages } from "@/i18n/messages";
+import { pathFor } from "@/i18n/routes";
+import { AIRPORTS, airportLabel, isAirportCode, LOCALE_AIRPORT, type AirportCode } from "@/lib/airports";
 import { formatEuro, LIMITS, longDate, validateBooking, type BookingErrors } from "@/lib/booking";
 
 export type BookingHotel = {
@@ -14,12 +17,10 @@ export type BookingHotel = {
   byAirport: Readonly<Record<string, readonly { date: string; price: number }[]>>;
 };
 
-type BookingWidgetProps = { hotels: readonly BookingHotel[]; initialSlug?: string };
+type BookingWidgetProps = { hotels: readonly BookingHotel[]; initialSlug?: string; locale?: LocaleCode };
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"] as const;
-const WEEKDAYS = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"] as const;
 const YEAR = 2027;
 
 const field = "w-full rounded-xl border border-sand-200 bg-white px-3 py-2.5 text-sm font-semibold text-ocean-900 outline-none focus:border-lagoon-500 disabled:bg-sand-100";
@@ -38,9 +39,11 @@ const weeksOf = (monthIndex: number): (number | null)[][] => {
   return Array.from({ length: cells.length / 7 }, (_, row) => cells.slice(row * 7, row * 7 + 7));
 };
 
-export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) => {
+export const BookingWidget = ({ hotels, initialSlug = "", locale = DEFAULT_LOCALE }: BookingWidgetProps) => {
+  const t = getMessages(locale).booking;
+  const MONTHS = getMessages(locale).months;
   const [slug, setSlug] = useState(initialSlug);
-  const [airport, setAirport] = useState<AirportCode>("LIS");
+  const [airport, setAirport] = useState<AirportCode>(LOCALE_AIRPORT[locale]);
   const [date, setDate] = useState("");
   const [adults, setAdults] = useState(2);
   const [childAges, setChildAges] = useState<number[]>([]);
@@ -53,7 +56,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
   const [status, setStatus] = useState<Status>("idle");
   const [monthIndex, setMonthIndex] = useState(initialDefaultMonth(hotels, initialSlug));
 
-  // The suggested airport follows the browser language, unless the visitor chose one before.
+  // The airport follows the language of the page, unless the visitor chose one before.
   useEffect(() => {
     let saved: string | null = null;
     try {
@@ -61,7 +64,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
     } catch {
       saved = null;
     }
-    setAirport(isAirportCode(saved) ? saved : airportForLanguages(window.navigator.languages?.length ? window.navigator.languages : [window.navigator.language]));
+    if (isAirportCode(saved)) setAirport(saved);
   }, []);
 
   const hotel = hotels.find((item) => item.slug === slug);
@@ -71,7 +74,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
   const lowest = departures.length ? Math.min(...departures.map((departure) => departure.price)) : null;
   const rules = useMemo(() => Object.fromEntries(hotels.map((item) => [item.slug, { adultsOnly: item.adultsOnly }])), [hotels]);
   // After the first send attempt, messages follow the form live and disappear as soon as a field is fixed.
-  const found = validateBooking({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent }, rules);
+  const found = validateBooking({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent }, rules, t.errors);
   const errors: BookingErrors = submitted ? found : {};
 
   const chooseHotel = (next: string) => {
@@ -108,7 +111,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
       const response = await fetch("/api/pedido", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent, website }),
+        body: JSON.stringify({ hotelSlug: slug, airport, date, adults, childAges, name, email, whatsapp, consent, website, locale }),
       });
       setStatus(response.ok ? "sent" : "error");
     } catch {
@@ -119,12 +122,12 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
   if (status === "sent") {
     return (
       <div role="status" className="rounded-3xl border border-lagoon-500/30 bg-lagoon-100/50 p-8 text-center">
-        <h3 className="font-display text-2xl font-semibold text-ocean-900">Pedido recebido. Obrigado, {name.trim().split(" ")[0]}!</h3>
+        <h3 className="font-display text-2xl font-semibold text-ocean-900">{fmt(t.sentTitle, { name: name.trim().split(" ")[0] ?? "" })}</h3>
         <p className="mx-auto mt-3 max-w-lg text-ocean-900">
-          Estamos a tratar de todo o processo e logo que possível confirmamos. Enviámos-lhe um e-mail para {email.trim()} com o resumo do pedido.
+          {fmt(t.sentText, { email: email.trim() })}
         </p>
         <p className="mx-auto mt-3 max-w-lg text-sm text-ink-soft">
-          Este pedido é uma pré-reserva: não paga nada agora. Um agente vai contactá-lo para confirmar a disponibilidade e o preço final.
+          {t.sentNote}
         </p>
       </div>
     );
@@ -132,29 +135,29 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
 
   const weeks = weeksOf(monthIndex);
   const monthHasDeparture = (index: number) => departures.some((departure) => Number(departure.date.slice(5, 7)) === index + 1);
-  const adultsLabel = adults === 1 ? "1 adulto" : `${adults} adultos`;
+  const adultsLabel = adults === 1 ? t.oneAdult : fmt(t.adultsN, { n: adults });
 
   return (
-    <form onSubmit={submit} noValidate className="grid gap-8 lg:grid-cols-[1.1fr_1fr]" aria-label="Pedido de reserva">
+    <form onSubmit={submit} noValidate className="grid gap-8 lg:grid-cols-[1.1fr_1fr]" aria-label={t.requestTitle}>
       <div className="rounded-3xl border border-sand-200 bg-white p-5 shadow-sm sm:p-6">
         <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-ink-soft">
-          <span aria-hidden>▦</span> Datas de partida
+          <span aria-hidden>▦</span> {t.dates}
         </h3>
 
         <div className="mt-4">
-          <label htmlFor="aeroporto" className={label}>Aeroporto de partida</label>
+          <label htmlFor="aeroporto" className={label}>{t.airport}</label>
           <select id="aeroporto" value={airport} onChange={(event) => chooseAirport(event.target.value as AirportCode)} className={field}>
-            {AIRPORTS.map((item) => <option key={item.code} value={item.code}>{airportLabel(item.code)}</option>)}
+            {AIRPORTS.map((item) => <option key={item.code} value={item.code}>{airportLabel(item.code, locale)}</option>)}
           </select>
         </div>
 
         <div className="mt-4">
-          <label htmlFor="hotel" className={label}>Hotel</label>
+          <label htmlFor="hotel" className={label}>{t.hotel}</label>
           <select id="hotel" value={slug} onChange={(event) => chooseHotel(event.target.value)} className={field} aria-invalid={Boolean(errors.hotelSlug)}>
-            <option value="">Escolha o hotel</option>
+            <option value="">{t.chooseHotel}</option>
             {hotels.map((item) => (
               <option key={item.slug} value={item.slug}>
-                {item.name}{item.adultsOnly ? " (só adultos)" : ""}
+                {item.name}{item.adultsOnly ? t.adultsOnlyTag : ""}
               </option>
             ))}
           </select>
@@ -166,17 +169,17 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
             type="button"
             onClick={() => setMonthIndex((current) => Math.max(0, current - 1))}
             disabled={monthIndex === 0}
-            aria-label="Mês anterior"
+            aria-label={t.prevMonth}
             className="grid size-11 place-items-center rounded-full border border-sand-200 text-lg text-ocean-900 disabled:opacity-30"
           >
             ‹
           </button>
-          <p aria-live="polite" className="font-display text-xl font-semibold text-ocean-900">{MONTHS[monthIndex]} de {YEAR}</p>
+          <p aria-live="polite" className="font-display text-xl font-semibold text-ocean-900">{fmt(getMessages(locale).monthYear, { month: MONTHS[monthIndex] ?? "", year: YEAR })}</p>
           <button
             type="button"
             onClick={() => setMonthIndex((current) => Math.min(9, current + 1))}
             disabled={monthIndex === 9}
-            aria-label="Mês seguinte"
+            aria-label={t.nextMonth}
             className="grid size-11 place-items-center rounded-full border border-sand-200 text-lg text-ocean-900 disabled:opacity-30"
           >
             ›
@@ -184,7 +187,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
         </div>
 
         <div className="mt-4 grid grid-cols-7 gap-1.5 text-center text-[11px] font-bold uppercase tracking-wider text-ink-soft">
-          {WEEKDAYS.map((day) => <span key={day}>{day}</span>)}
+          {t.weekdays.map((day) => <span key={day}>{day}</span>)}
         </div>
         <div className="mt-2 grid grid-cols-7 gap-1.5">
           {weeks.flat().map((day, index) => {
@@ -205,7 +208,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
                 type="button"
                 onClick={() => setDate(iso)}
                 aria-pressed={selected}
-                aria-label={`${longDate(iso)}, ${formatEuro(dayPrice)} por pessoa`}
+                aria-label={fmt(t.dayAria, { date: longDate(iso, locale), price: formatEuro(dayPrice, locale) })}
                 className={`grid h-14 place-content-center rounded-xl border text-center transition-colors sm:h-16 ${
                   selected ? "border-ocean-900 bg-ocean-900 text-white" : "border-clove-500 bg-white text-ocean-900 hover:bg-clove-500/10"
                 }`}
@@ -219,28 +222,28 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
 
         <p className="mt-4 text-xs text-ink-soft">
           {!hotel
-            ? "Escolha o hotel para ver as datas e os preços."
+            ? t.hintNoHotel
             : monthHasDeparture(monthIndex)
-              ? `Preço por pessoa, em quarto duplo, 7 noites tudo incluído, com voo de ${airport === "LIS" ? "Lisboa" : airportLabel(airport)}.${lowest ? ` Desde ${formatEuro(lowest)}.` : ""}`
-              : "Sem partidas neste mês. Março a maio é época das chuvas; novembro e dezembro abrem quando a TUI tiver voos."}
+              ? `${fmt(t.hint, { city: airportLabel(airport, locale) })}${lowest ? fmt(t.hintFrom, { price: formatEuro(lowest, locale) }) : ""}`
+              : t.hintNone}
         </p>
         {errors.date ? <p className={errorText}>{errors.date}</p> : null}
       </div>
 
       <div className="rounded-3xl border border-sand-200 bg-white p-5 shadow-sm sm:p-6">
-        <h3 className="font-display text-2xl font-semibold text-ocean-900">Pedir reserva</h3>
-        <p className="mt-1 text-sm text-ink-soft">Sem pagar online. Um agente confirma disponibilidade e preço antes de a reserva ficar confirmada.</p>
+        <h3 className="font-display text-2xl font-semibold text-ocean-900">{t.requestTitle}</h3>
+        <p className="mt-1 text-sm text-ink-soft">{t.requestLead}</p>
 
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="adultos" className={label}>Adultos</label>
+            <label htmlFor="adultos" className={label}>{t.adults}</label>
             <select id="adultos" value={adults} onChange={(event) => setAdults(Number(event.target.value))} className={field}>
               {Array.from({ length: LIMITS.maxAdults }, (_, index) => index + 1).map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
             {errors.adults ? <p className={errorText}>{errors.adults}</p> : null}
           </div>
           <div>
-            <label htmlFor="criancas" className={label}>Crianças</label>
+            <label htmlFor="criancas" className={label}>{t.children}</label>
             <select
               id="criancas"
               value={childAges.length}
@@ -252,20 +255,20 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
             </select>
           </div>
         </div>
-        {hotel?.adultsOnly ? <p className="mt-2 text-xs text-ink-soft">{hotel.name} é um hotel só para adultos.</p> : null}
+        {hotel?.adultsOnly ? <p className="mt-2 text-xs text-ink-soft">{fmt(t.adultsOnlyNote, { name: hotel.name })}</p> : null}
 
         {childAges.length > 0 ? (
           <div className="mt-3 grid grid-cols-2 gap-3">
             {childAges.map((age, index) => (
               <div key={index}>
-                <label htmlFor={`idade-${index}`} className={label}>Idade da criança {index + 1}</label>
+                <label htmlFor={`idade-${index}`} className={label}>{fmt(t.childAge, { n: index + 1 })}</label>
                 <select
                   id={`idade-${index}`}
                   value={age}
                   onChange={(event) => setChildAges((current) => current.map((value, i) => (i === index ? Number(event.target.value) : value)))}
                   className={field}
                 >
-                  {Array.from({ length: LIMITS.maxChildAge + 1 }, (_, n) => n).map((n) => <option key={n} value={n}>{n === 1 ? "1 ano" : `${n} anos`}</option>)}
+                  {Array.from({ length: LIMITS.maxChildAge + 1 }, (_, n) => n).map((n) => <option key={n} value={n}>{n === 1 ? t.oneYear : fmt(t.years, { n })}</option>)}
                 </select>
               </div>
             ))}
@@ -276,22 +279,22 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
         {hotel && date && price !== undefined ? (
           <div className="mt-5 rounded-2xl bg-lagoon-100/60 p-4 text-sm text-ocean-900" aria-live="polite">
             <p className="font-bold">{hotel.name}</p>
-            <p>{longDate(date)} · {airportLabel(airport)} · 7 noites · tudo incluído</p>
+            <p>{fmt(t.summary, { date: longDate(date, locale), airport: airportLabel(airport, locale) })}</p>
             <p className="mt-2 font-display text-xl font-semibold">
-              {formatEuro(price * adults)} <span className="text-sm font-sans font-semibold text-ink-soft">para {adultsLabel} ({formatEuro(price)} por pessoa)</span>
+              {formatEuro(price * adults, locale)} <span className="text-sm font-sans font-semibold text-ink-soft">{fmt(t.priceFor, { who: adultsLabel, per: formatEuro(price, locale) })}</span>
             </p>
-            {childAges.length > 0 ? <p className="mt-1 text-xs text-ink-soft">Preço das crianças sob consulta.</p> : null}
+            {childAges.length > 0 ? <p className="mt-1 text-xs text-ink-soft">{t.childrenOnRequest}</p> : null}
           </div>
         ) : null}
 
         <div className="mt-5 space-y-3">
           <div>
-            <label htmlFor="nome" className={label}>Nome</label>
+            <label htmlFor="nome" className={label}>{t.name}</label>
             <input id="nome" name="name" autoComplete="name" value={name} onChange={(event) => setName(event.target.value)} className={field} aria-invalid={Boolean(errors.name)} />
             {errors.name ? <p className={errorText}>{errors.name}</p> : null}
           </div>
           <div>
-            <label htmlFor="email" className={label}>E-mail</label>
+            <label htmlFor="email" className={label}>{t.email}</label>
             <input id="email" name="email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} className={field} aria-invalid={Boolean(errors.email)} />
             {errors.email ? <p className={errorText}>{errors.email}</p> : null}
           </div>
@@ -311,7 +314,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
             {errors.whatsapp ? <p className={errorText}>{errors.whatsapp}</p> : null}
           </div>
           <div aria-hidden className="absolute -left-[9999px]">
-            <label htmlFor="website">Não preencha este campo</label>
+            <label htmlFor="website">{t.honeypot}</label>
             <input id="website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} />
           </div>
         </div>
@@ -319,7 +322,7 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
         <label className="mt-4 flex cursor-pointer items-start gap-3 text-sm text-ink-soft">
           <input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} className="mt-0.5 size-4 shrink-0 accent-clove-500" />
           <span>
-            Autorizo o tratamento dos meus dados para responder a este pedido. <Link href="/privacidade" className="font-semibold underline">Política de privacidade</Link>.
+            {t.consent} <Link href="/privacidade" className="font-semibold underline">{t.privacy}</Link>.
           </span>
         </label>
         {errors.consent ? <p className={errorText}>{errors.consent}</p> : null}
@@ -329,11 +332,11 @@ export const BookingWidget = ({ hotels, initialSlug = "" }: BookingWidgetProps) 
           disabled={status === "sending"}
           className="mt-5 w-full rounded-full bg-clove-500 px-6 py-3.5 font-bold text-white transition-colors hover:bg-clove-600 disabled:opacity-60"
         >
-          {status === "sending" ? "A enviar…" : "Enviar pedido de reserva"}
+          {status === "sending" ? t.sending : t.submit}
         </button>
         {status === "error" ? (
           <p role="alert" className="mt-3 text-sm font-semibold text-clove-600">
-            Não foi possível enviar agora. Tente de novo dentro de instantes ou ligue +351 937 045 579.
+            {t.error}
           </p>
         ) : null}
       </div>
