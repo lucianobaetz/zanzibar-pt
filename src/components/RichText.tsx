@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
+import { LeadCard } from "@/components/LeadCard";
 import { ZanzibarMap } from "@/components/ZanzibarMap";
 import type { Block } from "@/content/blog/types";
 
@@ -24,7 +25,7 @@ const Inline = ({ text }: { text: string }) => (
   </>
 );
 
-export const RichText = ({ blocks }: { blocks: readonly Block[] }) => (
+export const RichText = ({ blocks, source = "" }: { blocks: readonly Block[]; source?: string }) => (
   <div className="space-y-5 text-[17px] leading-[1.75] text-ink">
     {blocks.map((block, index) => {
       switch (block.type) {
@@ -103,6 +104,8 @@ export const RichText = ({ blocks }: { blocks: readonly Block[] }) => (
           );
         case "map":
           return <ZanzibarMap key={index} />;
+        case "lead":
+          return <LeadCard key={index} source={source} />;
       }
     })}
   </div>

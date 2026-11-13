@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SITE, whatsappUrl } from "@/lib/site";
+import { SITE } from "@/lib/site";
 
 const NAV = [
   { href: "/hoteis", label: "Hotéis" },
@@ -34,14 +34,12 @@ export const SiteHeader = () => (
               {item.label}
             </Link>
           ))}
-          <a
-            href={whatsappUrl("Olá! Quero saber mais sobre as viagens para Zanzibar.")}
-            className="rounded-full bg-clove-500 px-4 py-2 text-white shadow-sm transition-colors hover:bg-clove-600"
-            rel="noopener"
+          <Link
+            href="/hoteis"
+            className="rounded-full bg-clove-500 px-5 py-2 font-bold text-white shadow-sm transition-colors hover:bg-clove-600"
           >
-            <span className="sm:hidden">WhatsApp</span>
-            <span className="hidden sm:inline">Falar no WhatsApp</span>
-          </a>
+            Reservar
+          </Link>
           <a href={`tel:${SITE.phone}`} className="hidden rounded-full px-3 py-2 text-ocean-900 hover:bg-sand-100 xl:inline">
             {SITE.phoneDisplay}
           </a>

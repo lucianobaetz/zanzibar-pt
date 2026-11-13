@@ -55,3 +55,15 @@ export const longDate = (iso: string): string => {
 };
 
 export const formatEuro = (value: number): string => `${value.toLocaleString("pt-PT")} €`;
+
+export type LeadInput = { name: string; email: string; whatsapp: string; consent: boolean; source: string };
+export type LeadErrors = Partial<Record<"name" | "email" | "whatsapp" | "consent", string>>;
+
+/** Short form shown inside blog articles: the reader asks for dates and prices. */
+export const validateLead = (input: LeadInput): LeadErrors => {
+  const { name, email, whatsapp, consent } = validateBooking(
+    { hotelSlug: "", date: "", adults: 2, childAges: [], ...input },
+    {},
+  );
+  return { name, email, whatsapp, consent };
+};

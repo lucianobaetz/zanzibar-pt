@@ -9,7 +9,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { PLACES } from "@/content/destinos";
 import { ZANZIBAR_FAQ } from "@/content/faq";
 import { HOTELS } from "@/content/hotels";
-import { absoluteUrl, GOOGLE_REVIEWS, whatsappUrl } from "@/lib/site";
+import { absoluteUrl, GOOGLE_REVIEWS } from "@/lib/site";
 
 // Provisional SEO copy: final wording follows the Portugal keyword research.
 const TITLE = "Férias em Zanzibar tudo incluído com voo de Lisboa";
@@ -199,14 +199,13 @@ export default function HomePage() {
         <div className="relative isolate overflow-hidden rounded-[2rem] bg-ocean-900 p-8 text-white sm:p-14">
           <Image src="/images/destino/casal-banco-areia.webp" alt="" fill sizes="100vw" className="-z-10 object-cover opacity-40" />
           <h2 className="max-w-xl text-3xl font-semibold sm:text-4xl">Vamos planear a sua viagem a Zanzibar?</h2>
-          <p className="mt-3 max-w-lg text-sand-100">Diga-nos o hotel e as datas. Respondemos com uma proposta, sem pagar nada online.</p>
-          <a
-            href={whatsappUrl("Olá! Quero uma proposta para umas férias em Zanzibar.")}
-            rel="noopener"
+          <p className="mt-3 max-w-lg text-sand-100">Escolha o hotel e a data de partida. Fazemos o resto, sem pagar nada online.</p>
+          <Link
+            href="/hoteis"
             className="mt-7 inline-block rounded-full bg-clove-500 px-7 py-3.5 font-bold transition-colors hover:bg-clove-600"
           >
-            Falar no WhatsApp
-          </a>
+            Reservar
+          </Link>
         </div>
       </section>
     </>

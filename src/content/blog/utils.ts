@@ -35,3 +35,11 @@ export const relatedPosts = (post: Post, all: readonly Post[], limit = 3): Post[
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map(({ other }) => other);
+
+/** Puts the lead form before the middle section of the article, where the reader is most engaged. */
+export const withLeadForm = (blocks: readonly Block[]): readonly Block[] => {
+  const headings = blocks.flatMap((block, index) => (block.type === "h2" ? [index] : []));
+  if (headings.length < 3) return blocks;
+  const at = headings[Math.floor(headings.length / 2)] ?? blocks.length;
+  return [...blocks.slice(0, at), { type: "lead" }, ...blocks.slice(at)];
+};

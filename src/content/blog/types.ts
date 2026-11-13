@@ -8,7 +8,8 @@ export type Block =
   | { type: "note"; text: string }
   | { type: "image"; src: string; alt: string; caption?: string }
   | { type: "table"; head: readonly string[]; rows: readonly (readonly string[])[] }
-  | { type: "map" };
+  | { type: "map" }
+  | { type: "lead" };
 
 export type Post = {
   slug: string;

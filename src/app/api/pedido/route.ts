@@ -1,7 +1,7 @@
 import { HOTELS } from "@/content/hotels";
-import { validateBooking, normalizeWhatsapp, type BookingInput } from "@/lib/booking";
+import { validateBooking, validateLead, normalizeWhatsapp, type BookingInput } from "@/lib/booking";
 import { departuresFor } from "@/lib/departures";
-import { saveRequest, sendEmails, type StoredRequest } from "@/lib/pedidos";
+import { saveRequest, sendEmails, sendLeadEmails, type StoredLead, type StoredRequest } from "@/lib/pedidos";
 
 const rules = Object.fromEntries(HOTELS.map((hotel) => [hotel.slug, { adultsOnly: hotel.adultsOnly }]));
 
@@ -30,6 +30,8 @@ export async function POST(request: Request) {
 
   // Robots fill the hidden field; answer "ok" so they learn nothing.
   if (text(body.website, 200) !== "") return Response.json({ ok: true });
+
+  if (body.kind === "lead") return handleLead(body, ip);
 
   const childAges = Array.isArray(body.childAges) ? body.childAges.map(Number) : [];
   const input: BookingInput = {
@@ -71,6 +73,38 @@ export async function POST(request: Request) {
   // see "received" while the team is not notified. The request stays on disk for the record.
   if (!emailed) {
     console.error("pedido: SEM E-MAIL (configurar SMTP_* no servidor)", stored.hotelName, stored.date, saved ? "(guardado)" : "(não guardado)");
+    return Response.json({ ok: false, error: "O envio de e-mail não está disponível neste momento." }, { status: 503 });
+  }
+  return Response.json({ ok: true });
+}
+
+// Short form inside blog articles (same address, so no new route is needed on the server).
+async function handleLead(body: Record<string, unknown>, ip: string) {
+  const input = {
+    name: text(body.name, 100).trim(),
+    email: text(body.email, 120).trim(),
+    whatsapp: normalizeWhatsapp(text(body.whatsapp, 30)),
+    consent: body.consent === true,
+    source: text(body.source, 120),
+  };
+  const errors = validateLead(input);
+  if (Object.values(errors).some(Boolean)) return Response.json({ ok: false, errors }, { status: 400 });
+
+  const lead: StoredLead = { ...input, receivedAt: new Date().toISOString(), ip };
+  try {
+    await saveRequest(lead, "leads.jsonl");
+  } catch (error) {
+    console.error("lead: não gravou no disco", error);
+  }
+
+  let emailed = false;
+  try {
+    emailed = await sendLeadEmails(lead);
+  } catch (error) {
+    console.error("lead: falhou o envio de e-mail", error);
+  }
+  if (!emailed) {
+    console.error("lead: SEM E-MAIL (configurar SMTP_* no servidor)", lead.source);
     return Response.json({ ok: false, error: "O envio de e-mail não está disponível neste momento." }, { status: 503 });
   }
   return Response.json({ ok: true });

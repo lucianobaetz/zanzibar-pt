@@ -6,7 +6,7 @@ import { FaqSection } from "@/components/FaqSection";
 import { JsonLd } from "@/components/JsonLd";
 import { RichText } from "@/components/RichText";
 import { getPost, POSTS } from "@/content/blog";
-import { readingMinutes, relatedPosts } from "@/content/blog/utils";
+import { readingMinutes, relatedPosts, withLeadForm } from "@/content/blog/utils";
 import { absoluteUrl, SITE } from "@/lib/site";
 
 type PostPageProps = { params: Promise<{ slug: string }> };
@@ -100,7 +100,7 @@ export default async function PostPage({ params }: PostPageProps) {
         </div>
 
         <div className="mt-8">
-          <RichText blocks={post.blocks} />
+          <RichText blocks={withLeadForm(post.blocks)} source={post.slug} />
         </div>
 
         <ul className="mt-10 flex flex-wrap gap-2" aria-label="Etiquetas">
