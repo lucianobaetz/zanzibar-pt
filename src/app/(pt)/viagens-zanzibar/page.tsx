@@ -9,6 +9,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { ZANZIBAR_FAQ } from "@/content/faq";
 import { HOTELS } from "@/content/hotels";
 import { FROM_PRICE, eur } from "@/content/blog/shared";
+import { alternatesFor } from "@/i18n/seo";
 import { absoluteUrl } from "@/lib/site";
 
 const TITLE = "Viagens a Zanzibar com voo de Lisboa";
@@ -17,7 +18,7 @@ const DESCRIPTION = `Viagens a Zanzibar em tudo incluído com voo de Lisboa, 7 n
 export const metadata: Metadata = {
   title: { absolute: "Viagens a Zanzibar 2027 com voo de Lisboa" },
   description: DESCRIPTION,
-  alternates: { canonical: "/viagens-zanzibar" },
+  alternates: alternatesFor("pt", "holidays"),
   openGraph: { title: TITLE, description: DESCRIPTION, url: "/viagens-zanzibar", images: [{ url: "/images/destino/hero-molhe-por-do-sol.webp" }] },
 };
 

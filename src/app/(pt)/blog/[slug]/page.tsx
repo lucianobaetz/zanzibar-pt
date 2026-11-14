@@ -8,6 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { NewsletterCard } from "@/components/NewsletterCard";
 import { RichText } from "@/components/RichText";
 import { getPost, POSTS } from "@/content/blog";
+import { GUIDE_KEYS, POST_SLUGS } from "@/content/blog/slugs";
+import { alternatesForPost } from "@/i18n/seo";
 import { outline, readingMinutes, relatedPosts, withLeadForm } from "@/content/blog/utils";
 import { absoluteUrl, SITE } from "@/lib/site";
 
@@ -25,7 +27,10 @@ export const generateMetadata = async ({ params }: PostPageProps): Promise<Metad
     title: { absolute: post.seoTitle },
     description: post.description,
     keywords: [...post.keywords],
-    alternates: { canonical: path },
+    alternates: (() => {
+      const key = GUIDE_KEYS.find((guide) => POST_SLUGS[guide].pt === post.slug);
+      return key ? alternatesForPost("pt", key) : { canonical: path };
+    })(),
     openGraph: {
       type: "article",
       title: post.seoTitle,

@@ -6,20 +6,20 @@ export const melhorAlturaZanzibar: Post = {
   title: "Melhor altura para ir a Zanzibar: clima mês a mês",
   seoTitle: "Melhor altura para ir a Zanzibar: tempo mês a mês",
   description:
-    "Quando ir a Zanzibar? O tempo mês a mês, a época das chuvas, a época seca e as datas de partida de Lisboa em 2027.",
+    "Qual é a melhor altura para ir a Zanzibar? Tempo mês a mês, época das chuvas, época seca, mar e as datas de partida de Lisboa em 2027.",
   excerpt: "Quando chove, quando faz mais calor e quais os melhores meses para a praia, com as datas em que há partidas em 2027.",
   subtitle: "Clima, mar e preços mês a mês, e as datas de partida de Lisboa em 2027.",
   category: "Planear a viagem",
   tags: ["clima", "épocas", "2027"],
   status: "published",
-  keywords: ["melhor altura para ir a zanzibar", "quando ir a zanzibar", "melhor altura para visitar zanzibar", "tempo zanzibar"],
+  keywords: ["melhor altura para ir a zanzibar", "quando ir a zanzibar", "melhor altura para visitar zanzibar", "tempo zanzibar", "zanzibar melhor altura"],
   published: "2026-11-13",
-  updated: "2026-11-13",
-  cover: { src: "/images/destino/hero-molhe-por-do-sol.webp", alt: "Molhe ao pôr do sol numa praia de Zanzibar" },
+  updated: "2026-11-14",
+  cover: { src: "/images/destino/hero-molhe-por-do-sol.webp", alt: "Molhe ao pôr do sol numa praia de Zanzibar, na melhor altura do ano" },
   blocks: [
     {
       type: "p",
-      text: "**A melhor altura para ir a Zanzibar é de junho a outubro**, a estação seca, com céu limpo, menos humidade e noites mais frescas. Janeiro e fevereiro também são muito bons para praia, mas mais quentes. Março, abril e maio são os meses das grandes chuvas.",
+      text: "**A melhor altura para ir a Zanzibar é de junho a outubro**, a estação seca, com céu limpo, menos humidade e noites mais frescas. Janeiro e fevereiro também são muito bons para praia, mas mais quentes. Março, abril e maio são os meses das grandes chuvas. Se se pergunta quando ir a Zanzibar, esta é a resposta curta; a seguir explicamos mês a mês.",
     },
     {
       type: "p",
@@ -43,10 +43,28 @@ export const melhorAlturaZanzibar: Post = {
       alt: "Casal num banco de areia em Zanzibar com mar calmo",
       caption: "Na estação seca o mar tem cores mais intensas.",
     },
+    { type: "h2", text: "Qual é a melhor altura para ir a Zanzibar para a praia?" },
+    {
+      type: "p",
+      text: "Para quem quer sobretudo praia e mar azul, a melhor altura para ir a Zanzibar é de junho a outubro. O céu está mais limpo, a humidade é menor e as noites são agradáveis. Janeiro e fevereiro dão mais calor e mais sol direto, o que é ótimo para quem gosta de calor a sério, mas pede mais proteção solar e mais água.",
+    },
     { type: "h2", text: "E o mar, a que temperatura está?" },
     {
       type: "p",
-      text: "A água é quente todo o ano e dá para nadar em qualquer mês. O que muda é a visibilidade e as condições: na estação das chuvas o mar fica mais turvo e o vento mais irregular.",
+      text: "A água é quente todo o ano e dá para nadar em qualquer mês, em geral entre os 26 °C e os 29 °C. O que muda é a visibilidade e as condições: na estação das chuvas o mar fica mais turvo e o vento mais irregular.",
+    },
+    {
+      type: "p",
+      text: "Há ainda a maré. Na costa leste e no sudeste (Kiwengwa, Paje, Jambiani) a maré baixa afasta o mar muitos metros e o banho depende da hora. No norte (Nungwi e Kendwa) o efeito é menor. Para saber mais sobre as zonas, veja [onde fica Zanzibar e como é a ilha](/blog/onde-fica-zanzibar).",
+    },
+    { type: "h2", text: "Quando ir a Zanzibar para fazer kitesurf ou mergulho?" },
+    {
+      type: "ul",
+      items: [
+        "**Kitesurf:** o vento é mais constante entre junho e setembro e também em janeiro e fevereiro, sobretudo no sudeste, em Paje e Jambiani.",
+        "**Mergulho e snorkeling:** a melhor visibilidade costuma estar na estação seca, de junho a outubro.",
+        "**Passeios e Stone Town:** a estação seca é mais confortável para andar a pé e visitar a cidade.",
+      ],
     },
     { type: "h2", text: "Quando é a época alta?" },
     {
@@ -56,13 +74,13 @@ export const melhorAlturaZanzibar: Post = {
     { type: "h2", text: "Em que datas há partidas de Lisboa em 2027?" },
     {
       type: "p",
-      text: "Temos partidas ao sábado, duas por mês, em janeiro, fevereiro, junho, julho, agosto, setembro e outubro. Não há partidas em março, abril e maio (a época das chuvas), nem em novembro e dezembro. Veja os preços de cada data na [página de cada hotel](/hoteis).",
+      text: "Temos partidas ao sábado, duas por mês, em janeiro, fevereiro, junho, julho, agosto, setembro e outubro. Não há partidas em março, abril e maio (a época das chuvas), nem em novembro e dezembro. Veja os preços de cada data na [página de cada hotel](/hoteis) ou nas [viagens a Zanzibar com voo de Lisboa](/viagens-zanzibar).",
     },
     {
       type: "note",
       text: "Dica: se procura o melhor equilíbrio entre bom tempo e preço, olhe para **junho** e para **outubro**. São meses secos e ficam fora do pico de julho e agosto.",
     },
-    { type: "h2", text: "Então, quando ir?" },
+    { type: "h2", text: "Então, quando ir a Zanzibar?" },
     {
       type: "ul",
       items: [
@@ -77,6 +95,7 @@ export const melhorAlturaZanzibar: Post = {
     { question: "Qual é a melhor altura para ir a Zanzibar?", answer: "De junho a outubro, a estação seca, com céu limpo e menos humidade. Janeiro e fevereiro também são bons, mas mais quentes." },
     { question: "Quando chove em Zanzibar?", answer: "As grandes chuvas vão de março a maio. Em novembro e dezembro há chuvas mais curtas." },
     { question: "Que temperatura faz em Zanzibar?", answer: "De dia ronda quase sempre os 28 °C a 33 °C ao longo do ano, e o mar é quente em todos os meses." },
+    { question: "Qual é a melhor altura para ir a Zanzibar para fazer kitesurf?", answer: "Entre junho e setembro e em janeiro e fevereiro, quando o vento é mais constante, sobretudo no sudeste da ilha." },
     { question: "Em que meses há partidas de Lisboa em 2027?", answer: "Em janeiro, fevereiro e de junho a outubro, com duas partidas por mês, ao sábado." },
   ],
   related: DEFAULT_RELATED,

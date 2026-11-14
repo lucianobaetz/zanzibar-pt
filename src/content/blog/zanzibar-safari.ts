@@ -4,22 +4,22 @@ import { DEFAULT_RELATED } from "./shared";
 export const zanzibarSafari: Post = {
   slug: "zanzibar-safari",
   title: "Safari em Zanzibar: o que pode (e não pode) ver",
-  seoTitle: "Safari em Zanzibar: o que existe e alternativas",
+  seoTitle: "Zanzibar safari: o que existe e alternativas",
   description:
-    "Há safari em Zanzibar? Saiba o que pode ver na ilha (Jozani, tartarugas, golfinhos) e como fazer um safari a sério na Tanzânia continental.",
+    "Zanzibar safari: há safari na ilha? Veja o que pode ver (Jozani, tartarugas, golfinhos) e como fazer um safari a sério na Tanzânia continental.",
   excerpt: "Em Zanzibar não há leões nem elefantes, mas há passeios de natureza. E o safari a sério fica a um voo curto.",
   subtitle: "Como chegar aos parques da Tanzânia a partir da ilha.",
   category: "O que fazer",
   tags: ["safari", "Tanzânia", "parques"],
   status: "published",
-  keywords: ["zanzibar safari", "safari zanzibar", "safari tanzânia"],
+  keywords: ["zanzibar safari", "safari zanzibar", "safari em zanzibar", "safari tanzânia"],
   published: "2026-11-13",
-  updated: "2026-11-13",
-  cover: { src: "/images/destino/safari-girafa.webp", alt: "Girafa num safari em África" },
+  updated: "2026-11-14",
+  cover: { src: "/images/destino/safari-girafa.webp", alt: "Girafa num safari na Tanzânia, a partir de Zanzibar" },
   blocks: [
     {
       type: "p",
-      text: "**Em Zanzibar não há safari de animais selvagens grandes.** Não encontra leões, elefantes ou girafas na ilha. O que existe são passeios de natureza (florestas, tartarugas e golfinhos) e, para um safari a sério, é preciso ir à Tanzânia continental, o que se faz com um voo curto a partir de Zanzibar.",
+      text: "**Em Zanzibar não há safari de animais selvagens grandes.** Quem pesquisa «zanzibar safari» acaba muitas vezes por querer duas coisas diferentes, e convém separá-las. Não encontra leões, elefantes ou girafas na ilha. O que existe são passeios de natureza (florestas, tartarugas e golfinhos) e, para um safari a sério, é preciso ir à Tanzânia continental, o que se faz com um voo curto a partir de Zanzibar.",
     },
     { type: "h2", text: "O que pode ver em Zanzibar" },
     {
@@ -48,6 +48,16 @@ export const zanzibarSafari: Post = {
       src: "/images/destino/safari-chita.webp",
       alt: "Chita num safari em África",
     },
+    { type: "h2", text: "Como fazer um safari a partir de Zanzibar?" },
+    {
+      type: "p",
+      text: "A forma mais prática é um voo interno curto até à Tanzânia continental, que costuma andar pela hora e meia, seguido de um programa de um a vários dias com guia e viatura própria para safari. Há ainda saídas de um dia a reservas mais próximas da costa, como a de Nyerere, feitas de avioneta. Quanto mais dias, menos corridas são as distâncias, e o Serengeti e o Ngorongoro pedem, em regra, pelo menos duas ou três noites.",
+    },
+    { type: "h2", text: "Quando fazer safari na Tanzânia?" },
+    {
+      type: "p",
+      text: "A estação seca, de junho a outubro, é a mais procurada: a vegetação é mais baixa, os animais concentram-se junto à água e é mais fácil vê-los. É também a altura em que a praia em Zanzibar está no melhor. Veja o artigo sobre a [melhor altura para ir a Zanzibar](/blog/melhor-altura-para-ir-a-zanzibar) para combinar as datas.",
+    },
     { type: "h2", text: "Praia e safari na mesma viagem" },
     {
       type: "p",
@@ -70,6 +80,7 @@ export const zanzibarSafari: Post = {
   faq: [
     { question: "Há safari em Zanzibar?", answer: "Não há safari de animais selvagens grandes na ilha. Há passeios de natureza (Jozani, tartarugas e golfinhos) e passeios de barco chamados «safari»." },
     { question: "Onde fazer um safari a partir de Zanzibar?", answer: "Na Tanzânia continental: Serengeti, Ngorongoro, Tarangire, Mikumi e Nyerere, com voos internos curtos desde Zanzibar." },
+    { question: "Quanto tempo se demora de Zanzibar aos parques de safari?", answer: "Os voos internos para a Tanzânia continental rondam a hora e meia. Os programas variam entre uma saída de um dia e vários dias." },
     { question: "O safari está incluído nos pacotes?", answer: "Não. Os pacotes incluem voo desde Lisboa, 7 noites em tudo incluído, transfers e seguro de viagem." },
   ],
   related: DEFAULT_RELATED,

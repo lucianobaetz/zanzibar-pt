@@ -4,23 +4,24 @@ import { DEFAULT_RELATED } from "./shared";
 export const oQueFazerEmZanzibar: Post = {
   slug: "o-que-fazer-em-zanzibar",
   title: "O que fazer em Zanzibar: 12 sítios e experiências",
-  seoTitle: "O que fazer em Zanzibar: 12 sítios e experiências",
+  seoTitle: "Zanzibar o que visitar: 12 sítios e experiências",
   description:
-    "O que visitar e fazer em Zanzibar: praias, Stone Town, The Rock, kitesurf, tour das especiarias, passeios de barco e mais.",
+    "Zanzibar, o que visitar e fazer? 12 sítios: praias de Nungwi e Paje, Stone Town, The Rock, tour das especiarias, Jozani e passeios de barco, por zona.",
   excerpt: "As praias, a cidade histórica e os passeios que mais valem a pena numa semana em Zanzibar.",
   subtitle: "Praias, Stone Town, ilhas e passeios: o essencial para uma semana.",
   category: "O que fazer",
   tags: ["passeios", "praias", "Stone Town"],
   status: "published",
-  keywords: ["zanzibar o que visitar", "o que fazer em zanzibar", "o que ver em zanzibar"],
+  keywords: ["zanzibar o que visitar", "o que fazer em zanzibar", "o que visitar em zanzibar", "o que ver em zanzibar"],
   published: "2026-11-13",
-  updated: "2026-11-13",
-  cover: { src: "/images/destino/the-rock-topo.webp", alt: "The Rock, restaurante sobre uma rocha no mar de Zanzibar" },
+  updated: "2026-11-14",
+  cover: { src: "/images/destino/the-rock-topo.webp", alt: "The Rock, restaurante sobre uma rocha no mar de Zanzibar, um dos sítios a visitar" },
   blocks: [
     {
       type: "p",
-      text: "**Em Zanzibar o programa clássico junta praia, a cidade histórica de Stone Town e uma ou duas excursões.** Com 7 noites há tempo para tudo sem correrias. Estes são os 12 sítios e experiências que mais valem a pena.",
+      text: "**Em Zanzibar o programa clássico junta praia, a cidade histórica de Stone Town e uma ou duas excursões.** Quem pergunta «zanzibar o que visitar» costuma querer um plano simples, e com 7 noites há tempo para tudo sem correrias. Estes são os 12 sítios e experiências que mais valem a pena, agrupados por tipo.",
     },
+    { type: "h2", text: "O que visitar em Zanzibar: os 12 essenciais" },
     { type: "h2", text: "Praias" },
     {
       type: "ul",
@@ -62,6 +63,22 @@ export const oQueFazerEmZanzibar: Post = {
         "**Ilha Prisão:** passeio curto de barco desde Stone Town, para ver tartarugas gigantes.",
       ],
     },
+    { type: "h2", text: "O que ver em Stone Town num dia?" },
+    {
+      type: "p",
+      text: "Reserve uma manhã ou uma tarde para andar a pé pelas ruelas do centro histórico, sem mapa, à procura das portas esculpidas. Passe pelo Velho Forte, pelo mercado de Darajani e termine nos Jardins Forodhani, junto ao mar, onde ao fim do dia há bancas de comida de rua. Fica a poucos minutos do aeroporto, por isso encaixa bem no dia de chegada ou de partida.",
+    },
+    { type: "h2", text: "Como organizar a semana?" },
+    {
+      type: "ul",
+      items: [
+        "**Dias 1 e 2:** chegada, descanso e primeiros mergulhos na praia do hotel.",
+        "**Dia 3:** Stone Town e tour das especiarias.",
+        "**Dia 4:** passeio de dhow com snorkel ou golfinhos em Kizimkazi.",
+        "**Dia 5:** Floresta de Jozani e uma tarde em Paje ou Jambiani.",
+        "**Restantes dias:** praia, spa e pôr do sol, sem agenda.",
+      ],
+    },
     { type: "h2", text: "Quantos dias são precisos?" },
     {
       type: "p",
@@ -79,6 +96,7 @@ export const oQueFazerEmZanzibar: Post = {
   ],
   faq: [
     { question: "O que visitar em Zanzibar?", answer: "Stone Town, as praias de Nungwi, Kendwa, Paje e Jambiani, The Rock, o tour das especiarias, a floresta de Jozani e os passeios de barco." },
+    { question: "O que ver em Stone Town num dia?", answer: "As ruelas e portas esculpidas, o Velho Forte, o mercado de Darajani e, ao fim do dia, os Jardins Forodhani, junto ao mar." },
     { question: "Quantos dias são precisos em Zanzibar?", answer: "Uma semana permite praia, um dia em Stone Town e uma ou duas excursões sem correrias." },
     { question: "As excursões estão incluídas no pacote?", answer: "Não. Os pacotes incluem voo, 7 noites em tudo incluído, transfers e seguro. As excursões reservam-se à parte." },
   ],

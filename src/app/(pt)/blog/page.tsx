@@ -4,6 +4,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { POSTS } from "@/content/blog";
 import { readingMinutes } from "@/content/blog/utils";
+import { alternatesFor } from "@/i18n/seo";
 import { absoluteUrl } from "@/lib/site";
 
 const TITLE = "Blog de viagens a Zanzibar";
@@ -13,7 +14,7 @@ const DESCRIPTION =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/blog" },
+  alternates: alternatesFor("pt", "blog"),
   openGraph: { title: TITLE, description: DESCRIPTION, url: "/blog" },
 };
 

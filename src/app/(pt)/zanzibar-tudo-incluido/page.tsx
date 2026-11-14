@@ -8,6 +8,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { ZANZIBAR_FAQ, type Faq } from "@/content/faq";
 import { HOTELS } from "@/content/hotels";
 import { FROM_PRICE, eur } from "@/content/blog/shared";
+import { alternatesFor } from "@/i18n/seo";
 import { absoluteUrl } from "@/lib/site";
 
 const TITLE = "Zanzibar tudo incluído 2027";
@@ -16,7 +17,7 @@ const DESCRIPTION = `Zanzibar tudo incluído 2027 com voo de Lisboa: 5 hotéis, 
 export const metadata: Metadata = {
   title: { absolute: "Zanzibar tudo incluído 2027, com voo de Lisboa" },
   description: DESCRIPTION,
-  alternates: { canonical: "/zanzibar-tudo-incluido" },
+  alternates: alternatesFor("pt", "allinclusive"),
   openGraph: { title: TITLE, description: DESCRIPTION, url: "/zanzibar-tudo-incluido", images: [{ url: "/images/destino/cabanas-sobre-agua.webp" }] },
 };
 
