@@ -36,14 +36,14 @@ export const SiteHeader = ({ locale = DEFAULT_LOCALE }: { locale?: LocaleCode })
             <Link
               key={item.href}
               href={item.href}
-              className={`rounded-full px-3 py-2 text-ocean-900 hover:bg-sand-100 ${item.always ? "" : "hidden lg:inline"}`}
+              className={`rounded-full px-3 py-2 text-ocean-900 hover:bg-sand-100 ${item.always ? "hidden sm:inline" : "hidden lg:inline"}`}
             >
               {item.label}
             </Link>
           ))}
           <Link
             href={hotels}
-            className="rounded-full bg-clove-500 px-5 py-2 font-bold text-white shadow-sm transition-colors hover:bg-clove-600"
+            className="rounded-full bg-clove-500 px-4 py-2 font-bold sm:px-5 text-white shadow-sm transition-colors hover:bg-clove-600"
           >
             {t.book}
           </Link>

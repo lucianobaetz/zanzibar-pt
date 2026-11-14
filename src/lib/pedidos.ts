@@ -12,7 +12,7 @@ export type StoredLead = LeadInput & { receivedAt: string; ip: string };
 const esc = (value: string) => value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char] ?? char);
 
 // Every request is written to disk first, so a mail problem can never lose a customer.
-export const saveRequest = async (request: StoredRequest | StoredLead, file = "pedidos.jsonl"): Promise<void> => {
+export const saveRequest = async (request: StoredRequest | StoredLead | Record<string, unknown>, file = "pedidos.jsonl"): Promise<void> => {
   const dir = process.env.REQUESTS_DIR ?? "/var/lib/zanzibar-pt";
   await mkdir(dir, { recursive: true });
   await appendFile(path.join(dir, file), `${JSON.stringify(request)}\n`, "utf8");
@@ -126,6 +126,27 @@ export const sendLeadEmails = async (lead: StoredLead): Promise<boolean> => {
       `${SITE.name} · ${SITE.phoneDisplay} · ${SITE.email}`,
     ].join("\n"),
     html: `<p>Olá, ${esc(lead.name.split(" ")[0] ?? "")}!</p><p><strong>Estamos a tratar de todo o processo e logo que possível confirmamos.</strong></p><p>Vamos enviar-lhe as partidas de Lisboa em 2027 e os preços por hotel, tudo incluído, com voo e transfers. Se preferir, pode ver já o <a href="https://zanzibar.pt/hoteis">calendário de cada hotel</a>.</p><p>${esc(SITE.name)} · ${esc(SITE.phoneDisplay)} · ${esc(SITE.email)}</p>`,
+  });
+  return true;
+};
+
+export const sendNewsletterEmails = async (email: string, source: string): Promise<boolean> => {
+  const mail = transport();
+  if (!mail) return false;
+  const from = process.env.SMTP_FROM ?? `${SITE.name} <${process.env.SMTP_USER}>`;
+  await mail.sendMail({
+    from,
+    to: process.env.REQUESTS_TO ?? SITE.email,
+    replyTo: email,
+    subject: `Nova subscrição da newsletter: ${email}`,
+    text: `Nova subscrição.\nE-mail: ${email}\nArtigo: ${source}`,
+  });
+  await mail.sendMail({
+    from,
+    to: email,
+    replyTo: SITE.email,
+    subject: "Subscrição confirmada: partidas de Zanzibar",
+    text: ["Obrigado por subscrever!", "", "Vamos enviar-lhe as novas datas de partida, as vagas de última hora e dicas para Zanzibar.", "", `${SITE.name} · ${SITE.phoneDisplay} · ${SITE.email}`].join("\n"),
   });
   return true;
 };

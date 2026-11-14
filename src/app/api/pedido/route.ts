@@ -2,7 +2,7 @@ import { HOTELS } from "@/content/hotels";
 import { validateBooking, validateLead, normalizeWhatsapp, type BookingInput } from "@/lib/booking";
 import { isAirportCode } from "@/lib/airports";
 import { departuresFor } from "@/lib/departures";
-import { saveRequest, sendEmails, sendLeadEmails, type StoredLead, type StoredRequest } from "@/lib/pedidos";
+import { saveRequest, sendEmails, sendLeadEmails, sendNewsletterEmails, type StoredLead, type StoredRequest } from "@/lib/pedidos";
 
 const rules = Object.fromEntries(HOTELS.map((hotel) => [hotel.slug, { adultsOnly: hotel.adultsOnly }]));
 
@@ -33,6 +33,7 @@ export async function POST(request: Request) {
   if (text(body.website, 200) !== "") return Response.json({ ok: true });
 
   if (body.kind === "lead") return handleLead(body, ip);
+  if (body.kind === "newsletter") return handleNewsletter(body, ip);
 
   const childAges = Array.isArray(body.childAges) ? body.childAges.map(Number) : [];
   const input: BookingInput = {
@@ -109,5 +110,24 @@ async function handleLead(body: Record<string, unknown>, ip: string) {
     console.error("lead: SEM E-MAIL (configurar SMTP_* no servidor)", lead.source);
     return Response.json({ ok: false, error: "O envio de e-mail não está disponível neste momento." }, { status: 503 });
   }
+  return Response.json({ ok: true });
+}
+
+async function handleNewsletter(body: Record<string, unknown>, ip: string) {
+  const email = text(body.email, 120).trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return Response.json({ ok: false, error: "E-mail inválido." }, { status: 400 });
+  const entry = { email, source: text(body.source, 120), receivedAt: new Date().toISOString(), ip };
+  try {
+    await saveRequest(entry, "newsletter.jsonl");
+  } catch (error) {
+    console.error("newsletter: não gravou no disco", error);
+  }
+  let emailed = false;
+  try {
+    emailed = await sendNewsletterEmails(entry.email, entry.source);
+  } catch (error) {
+    console.error("newsletter: falhou o envio de e-mail", error);
+  }
+  if (!emailed) return Response.json({ ok: false, error: "O envio de e-mail não está disponível neste momento." }, { status: 503 });
   return Response.json({ ok: true });
 }
