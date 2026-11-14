@@ -1,4 +1,9 @@
+import { ALL_INCLUSIVE } from "@/views/AllInclusiveView";
+import { SALES } from "@/views/HolidaysView";
 import { POSTS } from "@/content/blog";
+import { localePosts, type GuideLocale } from "@/content/blog/locales";
+import { LOCALES } from "@/i18n/locales";
+import { pathFor } from "@/i18n/routes";
 import { HOTELS } from "@/content/hotels";
 import { ZANZIBAR_FAQ } from "@/content/faq";
 import { absoluteUrl, SITE, SITE_URL } from "@/lib/site";
@@ -11,6 +16,15 @@ export function GET() {
       `- [${hotel.name}](${absoluteUrl(`/hoteis/${hotel.slug}`)}): ${hotel.intro}`,
   ).join("\n");
   const guides = POSTS.map((post) => `- [${post.title}](${absoluteUrl(`/blog/${post.slug}`)}): ${post.excerpt}`).join("\n");
+  const otherLanguages = (["es", "fr", "en", "de"] as const satisfies readonly GuideLocale[])
+    .map((code) => {
+      const items = localePosts(code)
+        .map((post) => `- [${post.title}](${absoluteUrl(pathFor(code, "post", post.slug))}): ${post.excerpt}`)
+        .join("\n");
+      const sales = `- [${ALL_INCLUSIVE[code].title}](${absoluteUrl(pathFor(code, "allinclusive"))})\n- [${SALES[code].title}](${absoluteUrl(pathFor(code, "holidays"))})`;
+      return `### ${LOCALES[code].language} (${absoluteUrl(pathFor(code, "home"))})\n${sales}\n${items}`;
+    })
+    .join("\n\n");
   const faq = ZANZIBAR_FAQ.map((item) => `### ${item.question}\n${item.answer}`).join("\n\n");
 
   const body = `# ${SITE.name}
@@ -30,6 +44,11 @@ ${hotels}
 
 ## Guias
 ${guides}
+
+## Guides in other languages
+Each market has its own pages, written for that country (not translated word for word).
+
+${otherLanguages}
 
 ## Perguntas frequentes
 ${faq}

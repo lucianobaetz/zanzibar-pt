@@ -5,6 +5,7 @@ import { LeadCard } from "@/components/LeadCard";
 import { ZanzibarMap } from "@/components/ZanzibarMap";
 import type { Block } from "@/content/blog/types";
 import { slugify } from "@/content/blog/utils";
+import type { LocaleCode } from "@/i18n/locales";
 
 // Inline format: **bold** and [text](/internal-path).
 const INLINE = /(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/g;
@@ -26,7 +27,7 @@ const Inline = ({ text }: { text: string }) => (
   </>
 );
 
-export const RichText = ({ blocks, source = "" }: { blocks: readonly Block[]; source?: string }) => (
+export const RichText = ({ blocks, source = "", locale = "pt" }: { blocks: readonly Block[]; source?: string; locale?: LocaleCode }) => (
   <div className="space-y-5 text-[17px] leading-[1.75] text-ink">
     {blocks.map((block, index) => {
       switch (block.type) {
@@ -104,7 +105,7 @@ export const RichText = ({ blocks, source = "" }: { blocks: readonly Block[]; so
             </div>
           );
         case "map":
-          return <ZanzibarMap key={index} />;
+          return <ZanzibarMap key={index} locale={locale} />;
         case "lead":
           return <LeadCard key={index} source={source} />;
       }

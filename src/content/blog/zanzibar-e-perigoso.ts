@@ -6,20 +6,20 @@ export const zanzibarEPerigoso: Post = {
   title: "Zanzibar é perigoso? Segurança para quem viaja",
   seoTitle: "Zanzibar é perigoso? Segurança para viajantes",
   description:
-    "Zanzibar é seguro? O que saber sobre segurança, saúde, seguro de viagem e conselhos oficiais antes de viajar para Zanzibar a partir de Portugal.",
+    "Zanzibar é perigoso? O que saber sobre segurança, saúde, o seguro obrigatório e os conselhos oficiais antes de viajar para Zanzibar a partir de Portugal.",
   excerpt: "Uma resposta honesta sobre segurança em Zanzibar, incluindo a instabilidade recente na Tanzânia e o que verificar antes de partir.",
   subtitle: "Segurança, saúde e conselhos oficiais, com honestidade.",
   category: "Segurança e saúde",
   tags: ["segurança", "saúde", "conselhos"],
   status: "published",
-  keywords: ["zanzibar é perigoso", "zanzibar é seguro", "segurança zanzibar"],
+  keywords: ["zanzibar é perigoso", "zanzibar é seguro", "segurança zanzibar", "é seguro viajar para zanzibar"],
   published: "2026-11-13",
-  updated: "2026-11-13",
-  cover: { src: "/images/destino/mulheres-praia.webp", alt: "Pessoas a caminhar numa praia de Zanzibar" },
+  updated: "2026-11-14",
+  cover: { src: "/images/destino/mulheres-praia.webp", alt: "Pessoas a caminhar numa praia de Zanzibar, destino seguro para a maioria dos turistas" },
   blocks: [
     {
       type: "p",
-      text: "**A maior parte dos turistas passa uma semana em Zanzibar sem incidentes, sobretudo nos resorts.** Mas segurança não é uma garantia, e a situação na Tanzânia pode mudar. Antes de reservar, consulte sempre os conselhos de viagem oficiais mais recentes.",
+      text: "**Zanzibar é perigoso? Para a maior parte dos turistas, não: passam uma semana na ilha sem incidentes, sobretudo nos resorts.** Mas segurança não é uma garantia, e a situação na Tanzânia pode mudar. Antes de reservar, consulte sempre os conselhos de viagem oficiais mais recentes.",
     },
     { type: "h2", text: "A situação política: o que se passou recentemente" },
     {
@@ -29,6 +29,15 @@ export const zanzibarEPerigoso: Post = {
     {
       type: "note",
       text: "Consulte os conselhos aos viajantes do Ministério dos Negócios Estrangeiros de Portugal para a Tanzânia antes de reservar e novamente antes de partir. Se a situação mudar depois da reserva, falamos consigo.",
+    },
+    {
+      type: "p",
+      text: "Os avisos oficiais variam de país para país. Em novembro de 2026, por exemplo, a recomendação de Espanha para a Tanzânia é viajar com precaução e a do Canadá pede um grau elevado de cautela. Em ambos os casos o risco mais alto está longe de Zanzibar, na fronteira com Moçambique. Confirme sempre a recomendação mais recente do seu país.",
+    },
+    { type: "h2", text: "Seguro obrigatório para entrar em Zanzibar" },
+    {
+      type: "p",
+      text: "Desde 1 de outubro de 2024, todos os visitantes de Zanzibar (exceto residentes na Tanzânia) têm de ter um seguro de viagem obrigatório, comprado à Zanzibar Insurance Corporation, que cubra toda a estadia. As autoridades podem recusar a entrada a quem não o tenha. Como a cobertura desse seguro é limitada, é aconselhável ter também um seguro de viagem internacional com boa assistência médica.",
     },
     { type: "h2", text: "Riscos do dia a dia" },
     {
@@ -67,8 +76,9 @@ export const zanzibarEPerigoso: Post = {
   faq: [
     { question: "Zanzibar é perigoso?", answer: "Para quem fica em resort e faz excursões organizadas, o risco do dia a dia é baixo. Convém acompanhar os conselhos oficiais, porque a situação na Tanzânia pode mudar." },
     { question: "Houve problemas recentes na Tanzânia?", answer: "Sim. Em outubro e novembro de 2025, depois das eleições, houve protestos e perturbações, incluindo nos transportes. Verifique os avisos atuais antes de viajar." },
+    { question: "Preciso de um seguro especial para entrar em Zanzibar?", answer: "Sim. Desde 1 de outubro de 2024, os visitantes precisam de um seguro de viagem obrigatório, comprado à Zanzibar Insurance Corporation, e podem ver a entrada recusada sem ele." },
     { question: "Preciso de vacinas para ir a Zanzibar?", answer: "Fale com o seu médico ou com uma consulta do viajante antes de partir para saber o que lhe é recomendado." },
-    { question: "O seguro de viagem está incluído?", answer: "Sim, nos nossos pacotes o seguro de viagem está incluído. Leia as condições para confirmar a cobertura." },
+    { question: "O seguro de viagem está incluído?", answer: "Os nossos pacotes incluem seguro de viagem. Leia as condições para confirmar a cobertura e pergunte-nos como fica tratado o seguro obrigatório de Zanzibar." },
   ],
   related: DEFAULT_RELATED,
 };
