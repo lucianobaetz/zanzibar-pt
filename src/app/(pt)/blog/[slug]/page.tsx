@@ -138,17 +138,17 @@ export default async function PostPage({ params }: PostPageProps) {
       </div>
 
       <div className="mx-auto mt-16 grid max-w-6xl gap-6 px-5 md:grid-cols-2">
-        <section aria-labelledby="autor" className="rounded-3xl border border-sand-200 bg-white p-7 shadow-sm">
-          <p id="autor" className="text-[11px] font-bold uppercase tracking-[0.2em] text-clove-600">Escrito por</p>
+        <section aria-labelledby="equipa" className="rounded-3xl border border-sand-200 bg-white p-7 shadow-sm">
+          <p id="equipa" className="text-[11px] font-bold uppercase tracking-[0.2em] text-clove-600">Fale com a nossa equipa</p>
           <div className="mt-4 flex items-center gap-4">
-            <span aria-hidden className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-ocean-900 font-display text-2xl font-semibold text-white">LB</span>
+            <Image src="/images/equipa/sara.webp" alt="Sara, da equipa Zanzibar Resorts" width={80} height={80} className="h-20 w-20 shrink-0 rounded-full bg-sand-100 object-cover object-top ring-2 ring-sand-200" />
             <div>
-              <p className="font-display text-xl font-semibold text-ocean-900">Luciano Baetz</p>
-              <p className="text-sm text-ink-soft">{SITE.legalName}</p>
+              <p className="font-display text-xl font-semibold text-ocean-900">Sara</p>
+              <p className="text-sm text-ink-soft">Equipa Zanzibar Resorts</p>
             </div>
           </div>
           <p className="mt-4 text-[15px] leading-relaxed text-ink-soft">
-            Organizamos viagens a Zanzibar com voo de Lisboa e tratamos de todo o processo, do primeiro contacto ao regresso.
+            Escolha o hotel e a data. Tratamos de todo o processo, do pedido ao regresso.
           </p>
           <Link href="/hoteis" className="mt-5 inline-block rounded-full bg-clove-600 px-6 py-3 font-bold text-white shadow-sm transition hover:bg-clove-500 active:scale-[0.98]">
             Reservar
