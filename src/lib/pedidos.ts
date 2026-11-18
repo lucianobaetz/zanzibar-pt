@@ -38,6 +38,14 @@ const summaryLines = (request: StoredRequest): string[] => {
   ];
 };
 
+// The TUI room to quote: "Duplo + CHD" when there are children (owner, 18 Nov 2026), never just "quarto duplo".
+const tuiRoom = (request: StoredRequest): string => {
+  const kids = request.childAges.length;
+  if (kids === 0) return request.adults === 1 ? "quarto individual" : request.adults === 3 ? "quarto triplo" : "quarto duplo";
+  const ages = request.childAges.map((age) => `${age} anos`).join(", ");
+  return `quarto Duplo + ${kids === 1 ? "CHD" : `${kids} CHD`} (${kids === 1 ? "criança" : "crianças"}: ${ages})`;
+};
+
 // Returns true when both e-mails were handed to the mail server.
 export const sendEmails = async (request: StoredRequest): Promise<boolean> => {
   const mail = transport();
@@ -62,7 +70,7 @@ export const sendEmails = async (request: StoredRequest): Promise<boolean> => {
       `WhatsApp: ${request.whatsapp}`,
       "",
       "Cotar na TUI: https://pt.tui.com/single_product.php?pkt_id=33&Produto=Zanzibar&destino=TANZ%C3%82NIA",
-      `Partida: ${airportLabel(request.airport)} · voo mais barato · quarto duplo.`,
+      `Partida: ${airportLabel(request.airport)} · voo mais barato · ${tuiRoom(request)}.`,
     ].join("\n"),
   });
 
