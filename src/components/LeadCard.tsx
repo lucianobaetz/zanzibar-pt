@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { FROM_PRICE, eur } from "@/content/blog/shared";
 import { validateLead } from "@/lib/booking";
+import { PhoneField } from "@/components/PhoneField";
 import { SITE } from "@/lib/site";
 
 type Status = "idle" | "sending" | "sent" | "error";
@@ -98,7 +99,7 @@ export const LeadCard = ({ source }: { source: string }) => {
                 </div>
                 <div>
                   <label htmlFor="lead-whatsapp" className={label}>WhatsApp</label>
-                  <input id="lead-whatsapp" type="tel" className={input} placeholder="+351 912 345 678" autoComplete="tel" value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} aria-invalid={Boolean(errors.whatsapp)} />
+                  <PhoneField id="lead-whatsapp" locale="pt" className={input} invalid={Boolean(errors.whatsapp)} onChange={setWhatsapp} />
                   {errors.whatsapp ? <p className={errorText}>{errors.whatsapp}</p> : null}
                 </div>
                 <div aria-hidden className="absolute -left-[9999px]">
