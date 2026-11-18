@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { DEFAULT_LOCALE, type LocaleCode } from "@/i18n/locales";
+import { PhoneField } from "@/components/PhoneField";
 import { fmt, getMessages } from "@/i18n/messages";
 import { pathFor } from "@/i18n/routes";
 import { AIRPORTS, airportLabel, isAirportCode, LOCALE_AIRPORT, type AirportCode } from "@/lib/airports";
@@ -300,17 +301,7 @@ export const BookingWidget = ({ hotels, initialSlug = "", locale = DEFAULT_LOCAL
           </div>
           <div>
             <label htmlFor="whatsapp" className={label}>WhatsApp</label>
-            <input
-              id="whatsapp"
-              name="whatsapp"
-              type="tel"
-              autoComplete="tel"
-              placeholder="+351 912 345 678"
-              value={whatsapp}
-              onChange={(event) => setWhatsapp(event.target.value)}
-              className={field}
-              aria-invalid={Boolean(errors.whatsapp)}
-            />
+            <PhoneField id="whatsapp" locale={locale} className={field} invalid={Boolean(errors.whatsapp)} onChange={setWhatsapp} />
             {errors.whatsapp ? <p className={errorText}>{errors.whatsapp}</p> : null}
           </div>
           <div aria-hidden className="absolute -left-[9999px]">
