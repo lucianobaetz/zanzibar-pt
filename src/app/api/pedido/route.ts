@@ -2,6 +2,7 @@ import { HOTELS } from "@/content/hotels";
 import { validateBooking, validateLead, normalizeWhatsapp, type BookingInput } from "@/lib/booking";
 import { isAirportCode } from "@/lib/airports";
 import { departuresFor } from "@/lib/departures";
+import { forwardToCms } from "@/lib/cms";
 import { saveRequest, sendEmails, sendLeadEmails, sendNewsletterEmails, type StoredLead, type StoredRequest } from "@/lib/pedidos";
 
 const rules = Object.fromEntries(HOTELS.map((hotel) => [hotel.slug, { adultsOnly: hotel.adultsOnly }]));
@@ -65,6 +66,8 @@ export async function POST(request: Request) {
     console.error("pedido: não gravou no disco", error);
   }
 
+  await forwardToCms(stored, "booking");
+
   let emailed = false;
   try {
     emailed = await sendEmails(stored);
@@ -99,6 +102,8 @@ async function handleLead(body: Record<string, unknown>, ip: string) {
   } catch (error) {
     console.error("lead: não gravou no disco", error);
   }
+
+  await forwardToCms(lead, "lead");
 
   let emailed = false;
   try {
